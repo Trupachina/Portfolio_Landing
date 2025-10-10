@@ -257,7 +257,9 @@ p {font-size:1rem; line-height:1.6}</pre>
 
           <!-- Живой пример (как в Уроке 1: CodePad + «Запустить») -->
           <h4 style="margin-top:16px">Нажми «Запустить» — увидишь результат</h4>
-          <div class="editor" style="margin-top:10px">
+
+          <!-- Вариант А: split (HTML/CSS/JS) -->
+          <div class="editor" style="margin-top:10px" id="demoWrap2">
             <div class="codepad" id="demoPad2">
               <div class="tabs" role="tablist" aria-label="Редактор">
                 <button class="tab" data-for="#demo2-html" aria-selected="true" role="tab">index.html</button>
@@ -289,6 +291,49 @@ console.log('Demo L2 running');</textarea>
                 <button class="btn" id="btnDemoRun2" type="button">Запустить ▶</button>
               </div>
             </div>
+
+            <!-- Вариант Б: один файл -->
+            <div class="codepad" id="demoPad2-one" hidden>
+              <div class="tabs" role="tablist" aria-label="Единый файл">
+                <button class="tab" aria-selected="true" role="tab">index.html</button>
+              </div>
+              <div class="areas">
+<textarea id="demo2-one"><!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Демо Урок 2</title>
+  <style>
+    :root{--ink:#111}
+    body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Arial;color:var(--ink)}
+    main{padding:16px;max-width:720px;margin:0 auto}
+    h1{font-size:clamp(24px,4.2vw,36px);margin:16px 0 10px}
+    figure{margin:0}
+    figcaption{font-size:12px;color:#555;margin-top:6px}
+    img{max-width:100%;height:auto;border-radius:12px}
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Заголовок статьи</h1>
+    <figure>
+      <img src="https://picsum.photos/seed/catnap/900/420" alt="Кот спит на клавиатуре" width="900" height="420" loading="lazy">
+      <figcaption>Подпись к изображению</figcaption>
+    </figure>
+    <p>Абзац с комфортной высотой строки и длиной строки.</p>
+  </main>
+  <script>
+    console.log('Demo L2 running');
+  </script>
+</body>
+</html></textarea>
+              </div>
+              <div class="toolbar">
+                <button class="btn" id="btnDemoRun2One" type="button">Запустить ▶</button>
+              </div>
+            </div>
+
             <div class="runner">
               <iframe id="l2Out" title="Пример: Урок 2" sandbox="allow-scripts" loading="lazy"></iframe>
             </div>
@@ -593,6 +638,9 @@ console.log('Статья готова!');
     const doc = `<!doctype html><html><head><meta charset="utf-8"><style>${css}</style></head><body>${html}<script>${js}<\/script></body></html>`;
     byId('l2Out').srcdoc = doc;
   });
+  byId('btnDemoRun2One')?.addEventListener('click', ()=>{
+    byId('l2Out').srcdoc = byId('demo2-one').value;
+  });
 
   /* ===== Теория засчитывается: наблюдаем конец блока ===== */
   const theoryEnd = byId('theoryEnd-2');
@@ -687,16 +735,36 @@ console.log('Статья готова!');
   });
   byId('btnRunOneT2')?.addEventListener('click', ()=>{ byId('outT2').srcdoc = byId('codeT2-one').value; });
 
-  /* ===== Проверка мини-проекта ===== */
+  /* ===== ПРОВЕРКА мини-проекта (новое) ===== */
   document.addEventListener('click', (e)=>{
     const checkBtn = e.target.closest('[data-check="t2"]');
-    if(!checkBtn) return;
+    if (!checkBtn) return;
+
     const mode = getEditorMode();
-    const source = (mode==='split' ? byId('codeT2-html').value : byId('codeT2-one').value).toLowerCase();
-    const ok = /<h1>/.test(source) && /<figure>/.test(source) && /<figcaption>/.test(source) && /alt=/.test(source);
+
+    // Берём исходники
+    const htmlRaw = (mode === 'split' ? byId('codeT2-html').value : byId('codeT2-one').value);
+    const cssRaw  = (mode === 'split' ? byId('codeT2-css').value  : byId('codeT2-one').value);
+
+    const html = htmlRaw.toLowerCase();
+    const css  = cssRaw.toLowerCase();
+
+    // Критерии
+    const hasH1        = /<h1[\s>]/.test(html);
+    const hasFigure    = /<figure[\s>]/.test(html) && /<figcaption[\s>]/.test(html);
+    const hasImgAlt    = /<img[^>]*\salt\s*=/.test(html);
+    const hasResponsive = /img\s*\{[^}]*max-width\s*:\s*100%\s*;[^}]*height\s*:\s*auto/.test(css);
+
+    const ok = hasH1 && hasFigure && hasImgAlt && hasResponsive;
+
     const status = byId('t2-status');
-    if(status){ status.textContent = ok ? 'Мини-проверка пройдена ✓' : 'Нужно поправить'; status.className = ok ? 'ok' : 'err'; }
-    if(ok) launchConfetti();
+    if (status){
+      status.textContent = ok
+        ? 'Мини-проверка пройдена ✓'
+        : 'Нужно поправить: добавьте <h1>, <figure> с <img alt> и <figcaption>, а в CSS — img{max-width:100%; height:auto}';
+      status.className = ok ? 'ok' : 'err';
+    }
+    if (ok) { try { launchConfetti(); } catch{} }
   });
 
   /* ===== Глобальная настройка режима редактора (как в Уроке 1) ===== */
@@ -707,10 +775,18 @@ console.log('Статья готова!');
   }
   function applyEditorMode(){
     const m = getEditorMode();
+    // Теория
+    const padSplit = byId('demoPad2');
+    const padOne   = byId('demoPad2-one');
+    if (padSplit) padSplit.hidden = (m !== 'split');
+    if (padOne)   padOne.hidden   = (m !== 'single');
+    // Проект
     byId('padT2-split').hidden  = (m!=='split');
     byId('padT2-single').hidden = (m!=='single');
   }
   applyEditorMode();
+  // «Горячее» обновление при смене на главной в другой вкладке
+  addEventListener('storage', (e)=>{ if(e.key===EDITOR_KEY) applyEditorMode(); });
 
   /* ===== Прогресс курса ===== */
   const PROG_KEY = 'courseDone';
@@ -733,6 +809,8 @@ console.log('Статья готова!');
     launchConfetti();
   }
   updateProgressVisual();
+  // ВАЖНО: фикс для «Продолжить с места» — помечаем последний открытый урок
+  try{ localStorage.setItem(LAST_KEY, '2'); }catch{}
 
   /* ===== Кнопка завершения урока ===== */
   (function bindFinish(){

@@ -274,8 +274,9 @@
           <!-- Живой пример -->
           <h4 style="margin-top:16px">Нажми «Запустить» — увидишь результат</h4>
           <div class="editor" style="margin-top:10px">
-            <div class="codepad" id="demoPad">
-              <div class="tabs" role="tablist" aria-label="Редактор">
+            <!-- Режим SPLIT (HTML+CSS+JS) -->
+            <div class="codepad" id="demoPadSplit" hidden>
+              <div class="tabs" role="tablist" aria-label="Редактор (split)">
                 <button class="tab" data-for="#demo-html" aria-selected="true" role="tab">index.html</button>
                 <button class="tab" data-for="#demo-css"  aria-selected="false" role="tab">style.css</button>
                 <button class="tab" data-for="#demo-js"   aria-selected="false" role="tab">script.js</button>
@@ -315,9 +316,64 @@ document.querySelectorAll('nav a').forEach(a=>{
 });</textarea>
               </div>
               <div class="toolbar">
-                <button class="btn" id="btnDemoRun" type="button">Запустить ▶</button>
+                <button class="btn" id="btnDemoRunSplit" type="button">Запустить ▶</button>
               </div>
             </div>
+
+            <!-- Режим SINGLE (один файл) -->
+            <div class="codepad" id="demoPadSingle" hidden>
+              <div class="tabs" role="tablist" aria-label="Единый файл (theory)">
+                <button class="tab" aria-selected="true" role="tab">index.html</button>
+              </div>
+              <div class="areas">
+<textarea id="demo-one"><!DOCTYPE html>
+<html lang="ру">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Демо семантики</title>
+  <style>
+    body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Arial}
+    header,footer{padding:12px 16px;background:#f6f8ff}
+    main{padding:16px}
+    nav a{color:#334;margin-right:8px}
+    img{border-radius:10px}
+    article{border:1px solid #eee;border-radius:10px;padding:12px;background:#fff;margin-top:10px}
+  </style>
+</head>
+<body>
+<header>
+  <nav aria-label="Главное меню">
+    <a href="#">Домой</a> · <a href="#">Блог</a> · <a href="#">Контакты</a>
+  </nav>
+</header>
+<main>
+  <h1>Новости</h1>
+  <img src="https://placekitten.com/160/120" alt="Котёнок смотрит в камеру">
+  <section>
+    <h2>Неделя 1</h2>
+    <article>
+      <h3>Вышел релиз 1.0</h3>
+      <p>Исправления, улучшения, радость ✨</p>
+    </article>
+  </section>
+</main>
+<footer>© 2025</footer>
+<script>
+document.querySelectorAll('nav a').forEach(a=>{
+  a.addEventListener('click', e=>{
+    e.preventDefault(); alert('Навигация — демо');
+  });
+});
+</script>
+</body>
+</html></textarea>
+              </div>
+              <div class="toolbar">
+                <button class="btn" id="btnDemoRunOne" type="button">Запустить ▶</button>
+              </div>
+            </div>
+
             <div class="runner">
               <iframe id="l1Out" title="Пример: Урок 1" sandbox="allow-scripts" loading="lazy"></iframe>
             </div>
@@ -369,7 +425,7 @@ document.querySelectorAll('nav a').forEach(a=>{
     <!-- Проверь себя -->
     <section id="screen-memory" class="screen" role="region" aria-label="Проверь себя">
       <div class="content">
-        <div class="task-surface">
+        <div class="task-сurface task-surface">
           <h3>Проверка на запоминание</h3>
 
           <div class="practice">
@@ -410,7 +466,7 @@ document.querySelectorAll('nav a').forEach(a=>{
     <!-- Проект -->
     <section id="screen-project" class="screen" role="region" aria-label="Проект">
       <div class="content">
-        <div class="task-surface">
+        <div class="task-сurface task-surface">
           <h3 style="color:var(--orange)">Проект: мини-визитка</h3>
           <ol>
             <li><code>&lt;h1&gt;</code> «Привет, мир!»</li>
@@ -533,7 +589,7 @@ console.log('Привет из скрипта визитки!');
     <!-- Самостоятельно -->
     <section id="screen-independent" class="screen" role="region" aria-label="Самостоятельно">
       <div class="content">
-        <div class="task-surface">
+        <div class="task-сurface task-surface">
           <h3>Дополнительные идеи</h3>
           <ul>
             <li>Оберните картинку в <code>&lt;figure&gt;</code> + <code>&lt;figcaption&gt;</code>.</li>
@@ -549,7 +605,7 @@ console.log('Привет из скрипта визитки!');
     <!-- Рефлексия -->
     <section id="screen-reflection" class="screen" role="region" aria-label="Рефлексия">
       <div class="content">
-        <div class="task-surface">
+        <div class="task-сurface task-surface">
           <h3>Рефлексия</h3>
           <p>Поставьте галочки и завершите урок.</p>
           <label><input type="checkbox" id="r1a"> Понимаю назначение семантических тегов</label><br/>
@@ -668,7 +724,7 @@ console.log('Привет из скрипта визитки!');
     }
   });
 
-  /* ===== Вкладки и запуск демо ===== */
+  /* ===== Вкладки и запуск демо (теория) ===== */
   function bindTabs(root){
     root.addEventListener('click', (e)=>{
       const t = e.target.closest('.tab'); if(!t) return;
@@ -679,11 +735,15 @@ console.log('Привет из скрипта визитки!');
       area.querySelectorAll('textarea').forEach(x=>{ x.hidden = sel ? (x.id !== sel.slice(1)) : (x.id !== area.querySelector('textarea')?.id); });
     });
   }
-  const demoPad = byId('demoPad'); if(demoPad) bindTabs(demoPad);
-  byId('btnDemoRun')?.addEventListener('click', ()=>{
+  const demoPadSplit = byId('demoPadSplit'); if(demoPadSplit) bindTabs(demoPadSplit);
+
+  byId('btnDemoRunSplit')?.addEventListener('click', ()=>{
     const html = byId('demo-html').value, css=byId('demo-css').value, js=byId('demo-js').value;
     const doc = `<!doctype html><html><head><meta charset="utf-8"><style>${css}</style></head><body>${html}<script>${js}<\/script></body></html>`;
     byId('l1Out').srcdoc = doc;
+  });
+  byId('btnDemoRunOne')?.addEventListener('click', ()=>{
+    byId('l1Out').srcdoc = byId('demo-one').value;
   });
 
   /* ===== Засчитывание теории: наблюдаем конец блока ===== */
@@ -798,16 +858,50 @@ console.log('Привет из скрипта визитки!');
   });
   byId('btnRunOne')?.addEventListener('click', ()=>{ byId('outT1').srcdoc = byId('codeT1-one').value; });
 
-  /* ===== Проверка мини-проекта ===== */
+  /* ===== ПРОВЕРКА проекта (кнопка «Проверить ✓») ===== */
   document.addEventListener('click', (e)=>{
     const checkBtn = e.target.closest('[data-check="t1"]');
     if(!checkBtn) return;
+
     const mode = getEditorMode();
-    const source = (mode==='split' ? byId('codeT1-html').value : byId('codeT1-one').value).toLowerCase();
-    const ok = /<h1>/.test(source) && /<nav/.test(source) && /alt=/.test(source);
+
+    // Исходники
+    const htmlRaw = (mode === 'split' ? byId('codeT1-html').value : byId('codeT1-one').value);
+    const cssRaw  = (mode === 'split' ? byId('codeT1-css').value  : htmlRaw);
+
+    const html = htmlRaw.toLowerCase();
+    const css  = cssRaw.toLowerCase();
+
+    // Проверки
+    const hasH1 = /<h1[\s>]/.test(html);
+
+    const hasNav = /<nav[\s>]/.test(html);
+    const linksCount = (html.match(/<a[\s>]/g) || []).length;
+    const has3Links = linksCount >= 3;
+
+    const hasImgAlt = /<img[^>]*\salt\s*=/.test(html);
+
+    // img{max-width:100%; height:auto} — допускаем любой порядок свойств
+    const cssRespA = /img\s*\{[^}]*max-width\s*:\s*100%\s*;[^}]*height\s*:\s*auto/i.test(css);
+    const cssRespB = /img\s*\{[^}]*height\s*:\s*auto\s*;[^}]*max-width\s*:\s*100%/i.test(css);
+    const hasResponsiveImg = cssRespA || cssRespB;
+
+    const problems = [];
+    if(!hasH1) problems.push('добавьте <h1>');
+    if(!hasNav) problems.push('добавьте <nav>');
+    if(!has3Links) problems.push('сделайте минимум 3 ссылки внутри навигации');
+    if(!hasImgAlt) problems.push('добавьте <img> с атрибутом alt');
+    if(!hasResponsiveImg) problems.push('в CSS добавьте правило img{max-width:100%; height:auto}');
+
+    const ok = problems.length === 0;
     const status = byId('t1-status');
-    if(status){ status.textContent = ok ? 'Мини-проверка пройдена ✓' : 'Нужно поправить'; status.className = ok ? 'ok' : 'err'; }
-    if(ok) launchConfetti();
+    if(status){
+      status.textContent = ok
+        ? 'Проект проверен ✓'
+        : 'Нужно поправить: ' + problems.join('; ');
+      status.className = ok ? 'ok' : 'err';
+    }
+    if(ok) { try{ launchConfetti(); }catch{} }
   });
 
   /* ===== Глобальная настройка из index.html ===== */
@@ -818,10 +912,16 @@ console.log('Привет из скрипта визитки!');
   }
   function applyEditorMode(){
     const m = getEditorMode();
+    // Проект
     byId('padT1-split').hidden  = (m!=='split');
     byId('padT1-single').hidden = (m!=='single');
+    // Теория
+    byId('demoPadSplit').hidden  = (m!=='split');
+    byId('demoPadSingle').hidden = (m!=='single');
   }
   applyEditorMode();
+  // «Горячее» обновление при смене в другой вкладке (index.html)
+  addEventListener('storage', (e)=>{ if(e.key===EDITOR_KEY) applyEditorMode(); });
 
   /* ===== Прогресс курса ===== */
   const PROG_KEY = 'courseDone';
@@ -844,13 +944,15 @@ console.log('Привет из скрипта визитки!');
     launchConfetti();
   }
   updateProgressVisual();
+  // Фикс «Продолжить с места» — помечаем открытый урок как последний
+  try{ localStorage.setItem(LAST_KEY, '1'); }catch{}
 
   /* ===== Кнопка завершения урока ===== */
   (function bindFinish(){
     const btn = byId('btnFinishL1');
     const a = byId('r1a'), b = byId('r1b');
     if(!btn || !a || !b) return;
-    const sync = ()=>{ const ok = a.checked && b.checked; btn.disabled = !ok; btn.classList.toggle('locked', !ok); };
+    const sync = ()=>{ const ok = a.checked && b.checked; btn.disabled = !ок; btn.classList.toggle('locked', !ок); };
     a.addEventListener('change', sync); b.addEventListener('change', sync);
     btn.addEventListener('click', ()=> markLessonDone(1));
     sync();

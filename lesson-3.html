@@ -7,33 +7,52 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
 
 <style>
   :root{
     --sans:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    --ink:#0b0f14; --muted:#6b7280; --card:#fff;
-    --blue:#2563eb; --green:#10b981; --orange:#f59e0b;
-    --ring:rgba(37,99,235,.20); --shadow:0 10px 35px rgba(30,30,60,.10);
+    --ink:#1f2937; --muted:#6b7280; --card:#fff;
+    --blue:#6d7cff; --green:#10b981; --orange:#f59e0b;
+    --ring:rgba(109,124,255,.28); --shadow:0 12px 36px rgba(31,41,55,.12);
     --radius:16px; --wrap:1100px;
     --font-size:16px; --spacing:16px;
   }
-  body{ margin:0; color:var(--ink); font:var(--font-size)/1.55 var(--sans);
-    background:linear-gradient(120deg,#ff9a9e 0%,#fad0c4 25%,#fbc2eb 50%,#a18cd1 75%,#f6d365 100%);
-    background-size:200% 200%; animation:gradientWalk 18s ease infinite;
-  }
-  @keyframes gradientWalk{
-    0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%}
-  }
-  *{box-sizing:border-box}
+
   html{scroll-behavior:smooth}
+  body{
+    margin:0; color:var(--ink); font:var(--font-size)/1.6 var(--sans);
+    min-height:100svh; overflow-x:hidden;
+    background:
+      radial-gradient(900px 600px at 85% 8%,  rgba(249,168,212,.35), transparent 60%),
+      radial-gradient(900px 700px at 12% 25%, rgba(196,181,253,.38), transparent 65%),
+      radial-gradient(900px 700px at 50% 120%, rgba(255,209,166,.28), transparent 60%),
+      linear-gradient(135deg, #ffd485 0%, #ffb4c7 52%, #c87bff 100%);
+    background-repeat:no-repeat;
+    background-size:160% 160%;
+    animation:bg-move 26s ease-in-out infinite alternate;
+  }
+  @keyframes bg-move{
+    0%  { background-position: 0% 40%, 20% 20%, 60% 90%, 0% 0% }
+    50% { background-position: 80% 10%, 10% 40%, 40% 120%, 60% 40% }
+    100%{ background-position: 50% 0%, 0% 60%, 50% 100%, 100% 60% }
+  }
+  body::before{
+    content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image: radial-gradient(circle at 1px 1px, rgba(115,112,216,.18) 1px, transparent 1.6px);
+    background-size:18px 18px; opacity:.45;
+  }
+  header, main, footer, #toTop, #confettiCanvas{ position:relative; z-index:1; }
+
+  *{box-sizing:border-box}
+  .mono{font-family:var(--mono)}
 
   .wrap{max-width:var(--wrap); margin:0 auto; padding:var(--spacing)}
   header{
-    position:sticky; top:0; z-index:20;
+    position:sticky; top:0; z-index:10;
     backdrop-filter:saturate(150%) blur(10px);
-    background:rgba(255,255,255,.75);
+    background:rgba(255,255,255,.82);
     border-bottom:1px solid rgba(0,0,0,.06);
   }
   .brand{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
@@ -41,36 +60,41 @@
     background:radial-gradient(120% 140% at 20% 20%, #fff 0%, #ffd4e6 48%, #e8f0ff 92%);
     box-shadow:0 0 0 2px rgba(255,255,255,.75), inset 0 0 18px rgba(99,102,241,.25);
   }
-  h1{margin:0; font-size:24px; font-weight:800}
-  .subtitle{color:var(--muted); font-size:13px; margin-top:2px}
+  h1{margin:0; font-size:24px; font-weight:700}
+  .subtitle{color:var(--muted); font-size:13px; margin-top:2px; font-weight:500}
 
   .topbar{display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:10px}
   .btn{
     display:inline-flex; align-items:center; gap:8px; padding:9px 12px;
-    border-radius:12px; border:1px solid rgba(0,0,0,.06); background:#fff; font-weight:800; cursor:pointer;
+    border-radius:12px; border:1px solid rgba(0,0,0,.06); background:#fff; font-weight:600; cursor:pointer;
+    text-decoration:none; color:inherit;
   }
   .btn[aria-pressed="true"]{box-shadow:0 0 0 3px var(--ring)}
   .btn.primary{background:linear-gradient(180deg,#fff,#f8fbff)}
+  .btn:focus-visible{outline:3px solid var(--ring); outline-offset:3px}
 
   .progress{display:flex; align-items:center; gap:8px}
   .progress .bar{width:min(42vw,260px); height:8px; background:#eef2ff; border-radius:999px; overflow:hidden}
-  .progress .bar i{display:block; height:100%; width:0%; background:linear-gradient(90deg,#7aa2ff,#ff86c2)}
-  .progress .txt{font:700 12px var(--mono); color:#102a43}
+  .progress .bar i{display:block; height:100%; width:0%; background:linear-gradient(90deg,#b7c4ff,#f9a8d4)}
+  .progress .txt{font:600 12px var(--mono); color:#102a43}
 
   .card{
-    background:linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.82));
+    background:linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.86));
     border:1px solid rgba(0,0,0,.06);
     border-radius:var(--radius); box-shadow:var(--shadow);
     margin-bottom:var(--spacing);
   }
   .card .hd{display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid rgba(0,0,0,.06)}
-  .card .hd h2{margin:0; font-size:18px}
+  .card .hd h2{margin:0; font-size:18px; font-weight:700}
   .content{padding:14px 16px 16px}
 
+  /* Steps */
   .lesson-progress{display:flex; flex-wrap:wrap; gap:8px}
   .lesson-progress .step{
     --c:#cbd5e1;
-    padding:8px 10px; border-radius:10px; font:700 12px var(--mono);
+    display:inline-flex; align-items:center; gap:8px;
+    padding:8px 12px 8px 22px;
+    border-radius:10px; font:700 12px var(--mono);
     border:1px solid rgba(0,0,0,.06); background:#fff; color:#0b0f14; position:relative; cursor:pointer;
   }
   .lesson-progress .step[data-step="theory"]{--c:var(--blue)}
@@ -78,19 +102,43 @@
   .lesson-progress .step[data-step="project"]{--c:var(--orange)}
   .lesson-progress .step::before{
     content:""; width:8px; height:8px; border-radius:999px; background:var(--c);
-    position:absolute; left:8px; top:50%; transform:translateY(-50%);
+    position:absolute; left:8px; top:50%; transform:translateY(-50%); pointer-events:none;
   }
   .lesson-progress .step.active{outline:3px solid var(--ring)}
+
   .screen{display:none}
   .screen.active{display:block; animation:fade .22s ease}
   @keyframes fade{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
+
   .badge{font:700 11px/1 var(--mono); padding:6px 8px; border-radius:999px; background:#eef2ff; border:1px solid #dbe3ff; color:#102a43}
   .pill{padding:6px 10px; border-radius:999px; background:#f6f9ff; border:1px solid rgba(0,0,0,.06); font:600 12px/1 var(--mono)}
   .task-surface{background:linear-gradient(180deg,#fff,#fff6f7); border:1px solid rgba(0,0,0,.06); border-radius:16px; padding:12px}
+  .lead{font-size:18px}
+
+  /* CodePad */
+  .codepad{background:#0f1022; border-radius:14px; border:1px solid rgba(255,255,255,.06); color:#e8ebff}
+  .codepad .tabs{display:flex; align-items:center; gap:8px; padding:10px; border-bottom:1px solid rgba(255,255,255,.08)}
+  .codepad .tab{padding:8px 10px; border-radius:8px; font:600 12px var(--mono); cursor:pointer; background:transparent; color:#b9c0ff; border:1px solid transparent}
+  .codepad .tab[aria-selected="true"]{background:#1a1b39; color:#fff; border-color:rgba(255,255,255,.08)}
+  .codepad .areas{display:grid}
+  .codepad textarea{background:#0f1022; color:#e8ebff; border:0; min-height:260px}
+  .codepad .toolbar{padding:10px; border-top:1px solid rgba(255,255,255,.08)}
+  .codepad .btn{background:#1a1b39; color:#fff; border-color:rgba(255,255,255,.08)}
+  .codepad .btn:hover{transform:translateY(-1px)}
+
+  /* Simple code boxes */
+  .codebox{background:#0f1022; color:#e8ebff; border:1px solid rgba(255,255,255,.08);
+    border-radius:12px; padding:10px; margin:10px 0; position:relative;}
+  .codebox pre{margin:0; font:600 13px/1.5 var(--mono); overflow:auto; white-space:pre}
+  .copy-btn{position:absolute; right:10px; top:10px; font:600 11px var(--mono);
+    background:#1a1b39; color:#fff; border:1px solid rgba(255,255,255,.12);
+    border-radius:8px; padding:6px 8px; cursor:pointer;}
+
   .editor{display:grid; gap:12px}
   textarea{
     width:100%; min-height:300px; resize:vertical;
     padding:12px 14px; font:600 14px/1.5 var(--mono); border:1px solid #e5e7eb; border-radius:12px; outline:none;
+    background:#0f1022; color:#e8ebff;
   }
   .runner{ background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:10px;}
   .runner iframe{ width:100%; min-height:380px; border:1px solid #e5e7eb; border-radius:12px; background:#fff; }
@@ -105,10 +153,9 @@
   .locked{opacity:.6; pointer-events:none}
   .hint-box{display:none; margin-top:8px; padding:10px 12px; border-radius:10px; border:1px solid #cde3ff; background:#eef6ff; color:#0b3a7a; font-weight:700}
   .hint-box.show{display:block}
-  .lead{font-size:18px}
 
   .navlinks{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
-  .navlinks a{ text-decoration:none; font-weight:800; }
+  .navlinks a{ text-decoration:none; }
 
   #toTop{
     position:fixed; right:16px; bottom:16px; z-index:50;
@@ -120,6 +167,7 @@
   #toTop.show{ opacity:1; pointer-events:auto }
   #toTop:hover{ transform:translateY(-2px) }
 
+  #confettiCanvas{position:fixed; inset:0; pointer-events:none; z-index:60}
   .sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;}
   @media(prefers-reduced-motion:reduce){ *{animation:none !important; transition:none !important} }
 </style>
@@ -168,8 +216,9 @@
     <section id="screen-hook" class="screen active" role="region" aria-label="Введение">
       <div class="content">
         <div class="task-surface">
-          <h3>Видимый фокус — это навигация для клавиатуры</h3>
-          <p class="lead">Не отключайте <code>outline</code> без замены: сделайте заметное <code>:focus-visible</code>. Иконкам-кнопкам — осмысленный <code>aria-label</code>.</p>
+          <h3>Видимый фокус — навигация для клавиатуры</h3>
+          <p class="lead">Не отключайте <code>outline</code> без замены: настройте <code>:focus-visible</code>. Иконкам-кнопкам — осмысленный <code>aria-label</code>. Цвета держим контрастными.</p>
+          <div class="badge">Мини-правило: контраст текста к фону ≥ <b>4.5:1</b>.</div>
           <div class="toolbar" style="margin-top:8px">
             <button class="btn" data-next="theory" type="button">К теории →</button>
           </div>
@@ -180,21 +229,81 @@
     <!-- Теория -->
     <section id="screen-theory" class="screen" role="region" aria-label="Теория">
       <div class="content">
-        <div class="task-surface" id="theoryScrollBox-3" style="max-height:38vh; overflow:auto" tabindex="0" aria-describedby="theoryEnd-3">
+        <div class="task-surface" id="theoryBox-3" tabindex="0" aria-describedby="theoryEnd-3">
           <h3 style="color:var(--blue)">Памятка</h3>
           <ul class="mono" style="font-weight:600">
-            <li>Контраст текста к фону ≥ <b>4.5:1</b></li>
-            <li>Фокус: <code>:focus-visible</code> с заметной обводкой (например, <code>outline:3px solid #007aff</code>)</li>
-            <li>Иконкам-кнопкам — <code>aria-label</code> (например, «Открыть меню»)</li>
+            <li>Контраст текста к фону ≥ <b>4.5:1</b> (обычный текст) и ≥ <b>3:1</b> (крупный ≥ 24px или 18.5px жирный).</li>
+            <li>Фокус: <code>:focus-visible</code> с заметной обводкой и <code>outline-offset</code>.</li>
+            <li>Иконкам-кнопкам добавляйте <code>aria-label</code> — доступное имя («Открыть меню», «Поиск»).</li>
           </ul>
+
+          <h4>Шаблон видимого фокуса</h4>
+          <div class="codebox">
+            <button class="copy-btn" data-copy="#code-focus">Скопировать</button>
+<pre id="code-focus">.btn:focus{ outline:3px solid #007aff; outline-offset:2px; }
+.btn:focus:not(:focus-visible){ outline:none; }</pre>
+          </div>
+
+          <h4>Шпаргалка по контрасту</h4>
+          <div class="codebox">
+            <button class="copy-btn" data-copy="#code-contrast">Скопировать</button>
+<pre id="code-contrast">/* Избегайте #9aa3b2 на #fff — слабоват контраст */
+.good-text{ color:#0b0f14; background:#f6f8ff; } /* ок для UI */</pre>
+          </div>
 
           <!-- Живой пример -->
           <div class="editor" style="margin-top:12px">
-            <div>
-              <div class="toolbar">
-                <b>Живой пример</b>
-                <button class="btn" data-run="#code3demo" data-out="#out3demo" type="button">Запустить ▶</button>
+            <!-- SPLIT -->
+            <div class="codepad" id="demoPadSplit" hidden>
+              <div class="tabs" role="tablist" aria-label="Редактор (split)">
+                <button class="tab" data-for="#demo3-html" aria-selected="true" role="tab">index.html</button>
+                <button class="tab" data-for="#demo3-css"  aria-selected="false" role="tab">style.css</button>
+                <button class="tab" data-for="#demo3-js"   aria-selected="false" role="tab">script.js</button>
               </div>
+              <div class="areas">
+<textarea id="demo3-html" role="tabpanel"><!-- index.html -->
+<h1 style="margin:0 0 8px">Фокус, контраст и доступные имена</h1>
+<p>Кликните в окно, затем нажмите <kbd>Tab</kbd> — увидите синюю обводку у кнопок.</p>
+<div class="row">
+  <button class="btn">Обычная кнопка</button>
+  <button class="btn iconbtn" aria-label="Открыть меню" title="Открыть меню">☰</button>
+  <button class="btn iconbtn" aria-label="Поиск" title="Поиск">🔎</button>
+</div>
+<h2 style="margin:18px 0 6px">Примеры контраста</h2>
+<div class="swatches">
+  <div class="card bad">Слабый контраст: #9aa3b2 на #fff</div>
+  <div class="card good">Хороший контраст: #0b0f14 на #f6f8ff</div>
+</div></textarea>
+<textarea id="demo3-css" role="tabpanel" hidden>/* style.css */
+:root{ --gap:14px }
+body{ margin:0; font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Arial; color:#111; padding:16px }
+.row{ display:flex; flex-wrap:wrap; gap:var(--gap); align-items:center }
+.card{ border:1px solid #e5e7eb; border-radius:12px; padding:12px; background:#fff; box-shadow:0 8px 20px rgba(0,0,0,.06) }
+.btn{ padding:10px 14px; border:1px solid #e5e7eb; border-radius:10px; background:#fff; font-weight:800; cursor:pointer }
+.iconbtn{ width:44px; height:44px; display:inline-flex; align-items:center; justify-content:center; font-size:18px }
+/* Видимый фокус + «страховка» */
+.btn:focus{ outline:3px solid #007aff; outline-offset:2px }
+.btn:focus:not(:focus-visible){ outline:none }
+/* Демонстрация контраста */
+.swatches{ display:grid; grid-template-columns:repeat(2,minmax(160px,1fr)); gap:10px; margin-top:10px }
+.bad  { color:#9aa3b2; background:#ffffff; border-radius:10px; padding:10px }
+.good { color:#0b0f14; background:#f6f8ff; border-radius:10px; padding:10px }</textarea>
+<textarea id="demo3-js" role="tabpanel" hidden>// script.js
+document.querySelectorAll('.btn').forEach(b=>{
+  b.addEventListener('click', ()=> alert('Демо: клик по кнопке'));
+});</textarea>
+              </div>
+              <div class="toolbar">
+                <button class="btn" id="btnDemoRunSplit3" type="button">Запустить ▶</button>
+              </div>
+            </div>
+
+            <!-- SINGLE -->
+            <div class="codepad" id="demoPadSingle" hidden>
+              <div class="tabs" role="tablist" aria-label="Единый файл (theory)">
+                <button class="tab" aria-selected="true" role="tab">index.html</button>
+              </div>
+              <div class="areas">
 <textarea id="code3demo"><!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -206,23 +315,21 @@
     .row{ display:flex; flex-wrap:wrap; gap:var(--gap); align-items:center }
     .card{ border:1px solid #e5e7eb; border-radius:12px; padding:12px; background:#fff; box-shadow:0 8px 20px rgba(0,0,0,.06) }
     .btn{ padding:10px 14px; border:1px solid #e5e7eb; border-radius:10px; background:#fff; font-weight:800; cursor:pointer }
+    .iconbtn{ width:44px; height:44px; display:inline-flex; align-items:center; justify-content:center; font-size:18px }
 
-    /* Кроссбраузерный видимый фокус */
+    /* Видимый фокус + «страховка» */
     .btn:focus{ outline:3px solid #007aff; outline-offset:2px }
     .btn:focus:not(:focus-visible){ outline:none }
 
     /* Демонстрация контраста */
     .swatches{ display:grid; grid-template-columns:repeat(2,minmax(160px,1fr)); gap:10px; margin-top:10px }
-    .bad  { color:#9aa3b2; background:#ffffff; border-radius:10px; padding:10px }  /* контраст слабоват */
+    .bad  { color:#9aa3b2; background:#ffffff; border-radius:10px; padding:10px }  /* контраст слабый */
     .good { color:#0b0f14; background:#f6f8ff; border-radius:10px; padding:10px }  /* контраст ок */
-
-    /* Иконка-кнопка только с aria-label */
-    .iconbtn{ width:44px; height:44px; display:inline-flex; align-items:center; justify-content:center; font-size:18px }
   </style>
 </head>
 <body>
   <h1 style="margin:0 0 8px">Фокус, контраст и доступные имена</h1>
-  <p>Кликните в это окно, затем нажмите <kbd>Tab</kbd> — увидите синее кольцо у кнопок.</p>
+  <p>Кликните в окно, затем нажмите <kbd>Tab</kbd> — увидите синюю обводку у кнопок.</p>
 
   <div class="row">
     <button class="btn">Обычная кнопка</button>
@@ -235,9 +342,19 @@
     <div class="card bad">Слабый контраст: #9aa3b2 на #fff</div>
     <div class="card good">Хороший контраст: #0b0f14 на #f6f8ff</div>
   </div>
+  <script>
+    document.querySelectorAll('.btn').forEach(b=>{
+      b.addEventListener('click', ()=> alert('Демо: клик по кнопке'));
+    });
+  </script>
 </body>
 </html></textarea>
+              </div>
+              <div class="toolbar">
+                <button class="btn" id="btnDemoRunOne3" type="button">Запустить ▶</button>
+              </div>
             </div>
+
             <div class="runner">
               <iframe id="out3demo" title="Пример: Урок 3" sandbox="allow-scripts" loading="lazy"></iframe>
             </div>
@@ -248,7 +365,7 @@
 
         <div class="toolbar" style="margin-top:10px">
           <button class="btn" data-next="practice" type="button">К практике →</button>
-          <span id="theoryStatus-3" class="badge" aria-live="polite">Доскролльте до конца</span>
+          <span id="theoryStatus-3" class="badge" aria-live="polite">Доскролльте до конца, чтобы засчитать теорию</span>
         </div>
       </div>
     </section>
@@ -261,7 +378,7 @@
 
           <div class="practice">
             <div class="q">Где фокус гарантированно видим?</div>
-            <div class="a">
+            <div class="a" role="group" aria-label="Выбор правила">
               <button class="btn" data-choice=".btn:focus-visible{outline:2px solid #000}" data-group="l3a1" type="button">:focus-visible 2px</button>
               <button class="btn" data-choice=".btn:focus{outline:0}" data-group="l3a1" type="button">outline:0</button>
               <span id="l3a1-status" aria-live="polite"></span>
@@ -271,7 +388,7 @@
           <div class="practice">
             <div class="q">Добавьте доступное имя иконке-кнопке (фрагмент HTML):</div>
             <div class="a">
-              <input id="l3a2" type="text" placeholder='<button aria-label="Открыть меню">…'>
+              <input id="l3a2" type="text" placeholder='<button aria-label="Открыть меню">…' aria-label="Введите фрагмент с aria-label">
               <button class="btn" id="l3a2-btn" type="button">Проверить</button>
               <span id="l3a2-status" aria-live="polite"></span>
             </div>
@@ -290,8 +407,8 @@
         <div class="task-surface">
           <h3 style="color:var(--orange)">Проект: доступные кнопки</h3>
           <ol>
-            <li>Сделайте фокус видимым (<span class="mono">:focus-visible</span> + «страховка» на <span class="mono">:focus</span>)</li>
-            <li>Иконке добавьте <span class="mono">aria-label</span></li>
+            <li>Сделайте фокус видимым (<span class="mono">:focus-visible</span> + «страховка» на <span class="mono">:focus</span>).</li>
+            <li>Иконке добавьте <span class="mono">aria-label</span>.</li>
           </ol>
           <div class="toolbar">
             <button class="btn" data-reveal="t3" type="button">Подсказка</button>
@@ -305,11 +422,50 @@
           <div>
             <div class="toolbar">
               <b>Редактор решения</b>
-              <button class="btn" data-run="#codeT3" data-out="#outT3" type="button">Запустить ▶</button>
+              <button class="btn" id="btnRunT3" type="button">Запустить ▶</button>
+              <button class="btn" id="btnBuildT3" type="button">Собрать ▶</button>
               <button class="btn" data-check="t3" type="button">Проверить ✓</button>
               <span id="t3-status" aria-live="polite"></span>
             </div>
-<textarea id="codeT3"><!DOCTYPE html>
+
+            <!-- Вариант А: split -->
+            <div class="codepad" id="padT3-split" hidden>
+              <div class="tabs" role="tablist" aria-label="Редактор проекта (split)">
+                <button class="tab" data-for="#codeT3-html" aria-selected="true" role="tab">index.html</button>
+                <button class="tab" data-for="#codeT3-css"  aria-selected="false" role="tab">style.css</button>
+                <button class="tab" data-for="#codeT3-js"   aria-selected="false" role="tab">script.js</button>
+              </div>
+              <div class="areas">
+<textarea id="codeT3-html" role="tabpanel"><!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Доступные кнопки</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- INSERT:BTN -->
+  <script src="script.js"></script>
+</body>
+</html></textarea>
+<textarea id="codeT3-css" role="tabpanel" hidden>/* style.css */
+body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial;color:#111;padding:16px}
+.btn{padding:10px 14px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;font-weight:800;cursor:pointer}
+.iconbtn{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;font-size:18px}
+/* INSERT:FOCUS */</textarea>
+<textarea id="codeT3-js" role="tabpanel" hidden>// script.js
+console.log('Проект 3: split');</textarea>
+              </div>
+            </div>
+
+            <!-- Вариант Б: один файл -->
+            <div class="codepad" id="padT3-single" hidden>
+              <div class="tabs" role="tablist" aria-label="Единый файл">
+                <button class="tab" aria-selected="true" role="tab">index.html</button>
+              </div>
+              <div class="areas">
+<textarea id="codeT3-one"><!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -317,13 +473,18 @@
   <style>
     body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial;color:#111;padding:16px}
     .btn{padding:10px 14px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;font-weight:800;cursor:pointer}
+    .iconbtn{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;font-size:18px}
     /* INSERT:FOCUS */
   </style>
 </head>
 <body>
   <!-- INSERT:BTN -->
+  <script>console.log('Проект 3: single');</script>
 </body>
 </html></textarea>
+              </div>
+            </div>
+
           </div>
           <div class="runner">
             <iframe id="outT3" title="Проект 3 — доступные кнопки" sandbox="allow-scripts" loading="lazy"></iframe>
@@ -346,6 +507,7 @@
           <h3>Дополнительно</h3>
           <ul>
             <li>Проверьте контраст текста на кнопке ≥ 4.5:1.</li>
+            <li>Добавьте <code>title</code> к иконкам как подсказку для мыши.</li>
           </ul>
           <div class="toolbar" style="margin-top:8px">
             <button class="btn" data-next="reflection" type="button">К рефлексии →</button>
@@ -363,7 +525,6 @@
           <label><input type="checkbox" id="r3b"> Помню про aria-label для иконок</label>
           <div class="toolbar" style="margin-top:8px">
             <button class="btn locked" id="btnFinishL3" type="button" disabled>Завершить урок 3 ✓</button>
-            <button class="btn" id="btnTestConfetti" type="button">Проверить конфетти ✨</button>
           </div>
           <p id="finishMsg-3" aria-live="polite"></p>
         </div>
@@ -373,22 +534,51 @@
 </main>
 
 <button id="toTop" type="button" aria-label="Наверх">↑ Наверх</button>
-<canvas id="confettiCanvas" aria-hidden="true" style="position:fixed;inset:0;pointer-events:none"></canvas>
+<canvas id="confettiCanvas" aria-hidden="true"></canvas>
 
 <script>
 (function(){
   'use strict';
 
-  /* === Утилиты === */
+  /* ===== Утилиты ===== */
   const $  = (s, r=document) => r.querySelector(s);
   const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
   const byId = id => document.getElementById(id);
   const clamp = (v,min,max)=>Math.max(min,Math.min(max,v));
-  const safe = s => (s||'').toLowerCase().replace(/\s+/g,'').replace(/["'`]/g,'');
+  const safeLower = s => (s||'').toLowerCase();
 
-  /* === Роутинг === */
+  /* ===== Конфетти ===== */
+  const cvs = byId('confettiCanvas'); const ctx = cvs.getContext('2d');
+  let W=0,H=0, parts=[], raf=null, reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function resize(){ W=cvs.width=innerWidth; H=cvs.height=innerHeight; }
+  addEventListener('resize', resize, {passive:true}); resize();
+  const COLORS=['#f87171','#fbbf24','#34d399','#60a5fa','#c084fc','#f472b6','#22d3ee'], SHAPES=['rect','circle','tri'];
+  function spawnConfetti(n=120){ if(reduce) return; for(let i=0;i<n;i++){ parts.push({x:Math.random()*W,y:-20,vx:(Math.random()-0.5)*3,vy:Math.random()*1.5+1.5,g:0.05+Math.random()*0.06,rot:Math.random()*Math.PI*2,vr:(Math.random()-0.5)*0.15,a:1,size:6+Math.random()*10,color:COLORS[(Math.random()*COLORS.length)|0],shape:SHAPES[(Math.random()*SHAPES.length)|0]});}}
+  function drawPart(p){ ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.globalAlpha=Math.max(0,p.a); ctx.fillStyle=p.color;
+    switch(p.shape){case'rect':ctx.fillRect(-p.size,-p.size*0.3,p.size*2,p.size*0.6);break;case'circle':ctx.beginPath();ctx.arc(0,0,p.size*0.6,0,Math.PI*2);ctx.fill();break;case'tri':ctx.beginPath();ctx.moveTo(-p.size,p.size*0.6);ctx.lineTo(p.size,p.size*0.6);ctx.lineTo(0,-p.size*0.8);ctx.closePath();ctx.fill();break;}
+    ctx.restore();}
+  function step(){ ctx.clearRect(0,0,W,H); parts.forEach(p=>{p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;p.a-=0.0042;drawPart(p);}); parts=parts.filter(p=>p.a>0&&p.y<H+80); if(parts.length){raf=requestAnimationFrame(step);}else{cancelAnimationFrame(raf);raf=null;} }
+  function launchConfetti(n=120){ spawnConfetti(n); if(!raf) raf=requestAnimationFrame(step); }
+
+  /* ===== Tabs ===== */
+  function bindTabs(root){
+    root?.addEventListener('click', (e)=>{
+      const t=e.target.closest('.tab'); if(!t) return;
+      const area=root.querySelector('.areas');
+      root.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected','false'));
+      t.setAttribute('aria-selected','true');
+      const sel=t.getAttribute('data-for');
+      area.querySelectorAll('textarea').forEach(ta=>{
+        ta.hidden = sel ? (ta.id !== sel.slice(1)) : (ta.id !== area.querySelector('textarea')?.id);
+      });
+    });
+  }
+  bindTabs(byId('demoPadSplit'));
+  bindTabs(byId('padT3-split'));
+
+  /* ===== Роутинг ===== */
   document.addEventListener('click', (e)=>{
-  	const step = e.target.closest('.lesson-progress .step');
+    const step = e.target.closest('.lesson-progress .step');
     if(step){
       const targetId = step.getAttribute('data-target');
       $$('.screen').forEach(s => s.classList.toggle('active', s.id===targetId));
@@ -402,83 +592,162 @@
       const navStep = $(`.lesson-progress .step[data-step="${next}"]`);
       if(navStep){ navStep.click(); }
     }
-    const runBtn = e.target.closest('[data-run]');
-    if(runBtn){
-      const ta = document.querySelector(runBtn.getAttribute('data-run'));
-      const out = document.querySelector(runBtn.getAttribute('data-out'));
-      if(ta && out){ out.srcdoc = ta.value; }
+    const copyBtn = e.target.closest('.copy-btn');
+    if(copyBtn){
+      const sel = copyBtn.getAttribute('data-copy');
+      const el = document.querySelector(sel);
+      if(el){ navigator.clipboard?.writeText(el.textContent).then(()=>{ copyBtn.textContent='Скопировано ✓'; setTimeout(()=>copyBtn.textContent='Скопировать',1200); }); }
     }
-    const checkBtn = e.target.closest('[data-check]');
-    if(checkBtn){ runSimpleCheck(checkBtn.getAttribute('data-check')); }
     const choiceBtn = e.target.closest('[data-choice][data-group]');
     if(choiceBtn){
       const val = choiceBtn.getAttribute('data-choice');
       const group = choiceBtn.getAttribute('data-group');
       const status = byId(`${group}-status`);
-      const isOk = (group==='l3a1') ? (/focus-visible/i.test(val) && /outline:\s*\d/.test(val)) : false;
+      const isOk = (group==='l3a1') ? (/focus-visible/i.test(val) && /outline\s*:\s*\d+/i.test(val)) : false;
       if(status){ status.textContent = isOk ? 'Верно' : 'Неверно'; status.className = isOk ? 'ok' : 'err'; }
-      if(isOk){ state.focusOk = true; tryUnlockPracticeNext(); }
+      if(isOk){ state.focusOk = true; tryUnlockPracticeNext(); launchConfetti(80); }
     }
   });
 
-  /* === Теория засчитывается при доскролле === */
-  const theoryBox = byId('theoryScrollBox-3');
-  theoryBox?.addEventListener('scroll', ()=>{
-    if(theoryBox.scrollTop + theoryBox.clientHeight >= theoryBox.scrollHeight - 4){
-      const b = byId('theoryStatus-3');
-      if(b){ b.textContent='Теория засчитана ✓'; b.classList.add('ok'); }
-    }
+  /* ===== Демо теории: запуск ===== */
+  byId('btnDemoRunOne3')?.addEventListener('click', ()=>{ byId('out3demo').srcdoc = byId('code3demo').value; });
+  byId('btnDemoRunSplit3')?.addEventListener('click', ()=>{
+    const html = byId('demo3-html').value;
+    const css  = byId('demo3-css').value;
+    const js   = byId('demo3-js').value;
+    const doc = `<!doctype html><html><head><meta charset="utf-8"><style>${css}</style></head><body>${html}<script>${js}<\/script></body></html>`;
+    byId('out3demo').srcdoc = doc;
   });
 
-  /* === Мини-практика === */
+  /* ===== Теория засчитывается ===== */
+  const theoryEnd = byId('theoryEnd-3');
+  if('IntersectionObserver' in window && theoryEnd){
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          const b = byId('theoryStatus-3');
+          if(b && !b.dataset.done){
+            b.textContent='Теория засчитана ✓'; b.classList.add('ok'); b.dataset.done='1';
+            launchConfetti(100);
+            io.disconnect();
+          }
+        }
+      });
+    },{root:null, rootMargin:'0px 0px -8% 0px'});
+    io.observe(theoryEnd);
+  }
+
+  /* ===== Мини-практика ===== */
   const state = { focusOk:false, ariaOk:false };
-
   byId('l3a2-btn')?.addEventListener('click', ()=>{
-    const v = safe(byId('l3a2')?.value);
-    const ok = v.includes('arialabel') && (v.includes('открытьменю') || (v.includes('open') && v.includes('menu')));
+    const v = safeLower(byId('l3a2')?.value).replace(/\s+/g,'').replace(/["'`]/g,'');
+    const hasAttr = v.includes('aria-label') || v.includes('arialabel');
+    const saysMenu = v.includes('открытьменю') || (v.includes('open') && v.includes('menu'));
+    const ok = hasAttr && saysMenu;
     const el = byId('l3a2-status');
     if(el){ el.textContent = ok ? 'Верно' : 'Попробуйте ещё'; el.className = ok ? 'ok' : 'err'; }
     state.ariaOk = ok;
+    if(ok) launchConfetti(80);
     tryUnlockPracticeNext();
   });
-
   function tryUnlockPracticeNext(){
     const allOk = state.focusOk && state.ariaOk;
     const b = byId('l3-next');
     if(b){ b.disabled = !allOk; b.classList.toggle('locked', !allOk); }
   }
 
-  /* === Проверка проекта === */
-  function runSimpleCheck(key){
-    const el = byId(`codeT${key.replace(/\D/g,'')}`); // codeT3
-    const status = byId(`${key}-status`);
-    const val = (el?.value || '').toLowerCase();
-    let ok = false;
-    if(key==='t3'){
-      ok = /focus-visible/.test(val) && /aria-label/.test(val);
-    }
-    if(status){ status.textContent = ok ? 'Мини-проверка пройдена ✓' : 'Нужно поправить'; status.className = ok ? 'ok' : 'err'; }
+  /* ===== Режим редактора из главной (single/split) ===== */
+  const EDITOR_KEY='editorMode'; // 'single' | 'split'
+  function getEditorMode(){
+    const v = localStorage.getItem(EDITOR_KEY);
+    return (v==='split' || v==='single') ? v : 'single';
+  }
+  function applyEditorMode(){
+    const m = getEditorMode();
+    // Теория
+    byId('demoPadSplit').hidden  = (m!=='split');
+    byId('demoPadSingle').hidden = (m!=='single');
+    // Проект
+    byId('padT3-split').hidden  = (m!=='split');
+    byId('padT3-single').hidden = (m!=='single');
+    // Кнопка "Собрать" нужна только для split
+    byId('btnBuildT3').style.display = (m==='split') ? '' : 'none';
+  }
+  applyEditorMode();
+  addEventListener('storage', (e)=>{ if(e.key===EDITOR_KEY) applyEditorMode(); });
+
+  /* ===== Проект: сборка/запуск и проверка ===== */
+  function buildProjectSplit(){
+    const html = byId('codeT3-html').value;
+    const css  = byId('codeT3-css').value;
+    const js   = byId('codeT3-js').value;
+    return `<!doctype html><html><head><meta charset="utf-8"><style>${css}</style></head><body>${html}<script>${js}<\/script></body></html>`;
+  }
+  function getProjectSource(){
+    return (getEditorMode()==='split') ? buildProjectSplit() : (byId('codeT3-one').value || '');
   }
 
-  /* === Подсказки: текст + автозаполнение редактора === */
+  byId('btnBuildT3')?.addEventListener('click', ()=>{ if(getEditorMode()==='split') byId('outT3').srcdoc = buildProjectSplit(); });
+  byId('btnRunT3')?.addEventListener('click', ()=>{
+    const m = getEditorMode();
+    byId('outT3').srcdoc = (m==='split') ? buildProjectSplit() : (byId('codeT3-one').value || '');
+  });
+
+  function runProjectCheck(key){
+    if(key!=='t3') return;
+    const status = byId('t3-status');
+    const src = getProjectSource();
+    const s = src.toLowerCase();
+
+    const hasFocusVisible = /\.btn\s*:\s*focus-visible\s*\{[^}]*outline\s*:\s*(?!\s*none\b)[^;]+;?[^}]*\}/i.test(s);
+    const hasFocusFallback = /\.btn\s*:\s*focus\s*\{[^}]*outline\s*:\s*(?!\s*none\b|0\b)[^;]+;?[^}]*\}/i.test(s);
+    const hasNotFocusVisibleNone = /:focus\s*:not\(\s*:focus-visible\s*\)\s*\{[^}]*outline\s*:\s*(?:none|0)\b/i.test(s);
+    const hasButtonAria = /<button\b[^>]*\saria-label\s*=\s*["'][^"']+["']/i.test(s);
+
+    const problems = [];
+    if(!hasFocusVisible) problems.push('добавьте .btn:focus-visible{ outline:… }');
+    if(!hasFocusFallback) problems.push('добавьте «страховку» .btn:focus{ outline:… }');
+    if(!hasNotFocusVisibleNone) problems.push('скройте фокус у мыши: .btn:focus:not(:focus-visible){ outline:none }');
+    if(!hasButtonAria) problems.push('добавьте кнопку с aria-label');
+
+    const ok = problems.length===0;
+    if(status){
+      status.textContent = ok ? 'Проект проверен ✓' : ('Нужно поправить: ' + problems.join('; '));
+      status.className = ok ? 'ok' : 'err';
+    }
+    if(ok) launchConfetti(140);
+  }
+  document.addEventListener('click', (e)=>{ const checkBtn = e.target.closest('[data-check]'); if(checkBtn) runProjectCheck(checkBtn.getAttribute('data-check')); });
+
+  /* ===== Подсказки ===== */
   const HINTS = {
     t3: {
-      text: 'Добавьте видимый фокус для .btn с кроссбраузерной «страховкой» и aria-label для иконки. Кнопка «Вставить подсказку…» заполнит шаблон.',
-      insert: (code) => {
-        let out = code;
-        // кроссбраузерный фокус (focus + focus:not(:focus-visible))
-        out = out.replace(
-          '/* INSERT:FOCUS */',
-          `.btn:focus{outline:3px solid #007aff; outline-offset:2px}
-    .btn:focus:not(:focus-visible){outline:none}`
-        );
-        out = out.replace('<!-- INSERT:BTN -->', '<button class="btn" aria-label="Открыть меню" title="Открыть меню">☰</button>');
-        return out;
+      text: 'Добавьте видимый фокус для .btn с кроссбраузерной «страховкой» и aria-label для иконки. Кнопка «Вставить…» заполнит текущий редактор.',
+      insertSingle: ()=>{
+        const ta = byId('codeT3-one');
+        if(ta && !ta.dataset.original) ta.dataset.original = ta.value;
+        if(ta){
+          ta.value = ta.value
+            .replace('/* INSERT:FOCUS */',
+`.btn:focus{outline:3px solid #007aff; outline-offset:2px}
+.btn:focus:not(:focus-visible){outline:none}
+.btn:focus-visible{outline:3px solid #007aff; outline-offset:2px}`)
+            .replace('<!-- INSERT:BTN -->','<button class="btn iconbtn" aria-label="Открыть меню" title="Открыть меню">☰</button>');
+        }
+      },
+      insertSplit: ()=>{
+        const html = byId('codeT3-html'), css = byId('codeT3-css');
+        if(html && !html.dataset.original) html.dataset.original = html.value;
+        if(css && !css.dataset.original) css.dataset.original = css.value;
+        if(html) html.value = html.value.replace('<!-- INSERT:BTN -->','<button class="btn iconbtn" aria-label="Открыть меню" title="Открыть меню">☰</button>');
+        if(css) css.value = css.value.replace('/* INSERT:FOCUS */',
+`.btn:focus{outline:3px solid #007aff; outline-offset:2px}
+.btn:focus:not(:focus-visible){outline:none}
+.btn:focus-visible{outline:3px solid #007aff; outline-offset:2px}`);
       }
     }
   };
 
-  // показать текст подсказки
   document.addEventListener('click', (e)=>{
     const r = e.target.closest('[data-reveal]');
     if(!r) return;
@@ -487,114 +756,67 @@
     if(box){ box.classList.add('show'); box.textContent = HINTS[key]?.text || 'Подсказка скоро будет…'; }
   });
 
-  // вставить подсказку в textarea
   document.addEventListener('click', (e)=>{
     const a = e.target.closest('[data-apply]');
     if(!a) return;
-    const key = a.getAttribute('data-apply');
-    const ta = byId(`codeT${key.replace(/\D/g,'')}`); // codeT3
-    if(ta){
-      if(!ta.dataset.original) ta.dataset.original = ta.value; // запомним исходник для сброса
-      const fn = HINTS[key]?.insert;
-      if(typeof fn === 'function'){ ta.value = fn(ta.value); }
-    }
+    (getEditorMode()==='split') ? HINTS.t3.insertSplit() : HINTS.t3.insertSingle();
   });
 
-  // сбросить textarea к исходнику
   document.addEventListener('click', (e)=>{
     const b = e.target.closest('[data-reset-code]');
     if(!b) return;
-    const key = b.getAttribute('data-reset-code');
-    const ta = byId(`codeT${key.replace(/\D/g,'')}`); // codeT3
-    if(ta && ta.dataset.original){ ta.value = ta.dataset.original; }
+    if(getEditorMode()==='split'){
+      const html = byId('codeT3-html'), css = byId('codeT3-css'), js = byId('codeT3-js');
+      if(html?.dataset.original) html.value = html.dataset.original;
+      if(css?.dataset.original) css.value = css.dataset.original;
+      if(js?.dataset.original) js.value = js.dataset.original;
+    }else{
+      const ta = byId('codeT3-one');
+      if(ta?.dataset.original) ta.value = ta.dataset.original;
+    }
   });
 
-  /* === Финиш урока === */
+  /* ===== Прогресс курса ===== */
   const PROG_KEY = 'courseDone';
+  const LAST_KEY = 'courseLast';
   function getDoneSet(){
     try{ const raw = localStorage.getItem(PROG_KEY); return new Set(raw ? JSON.parse(raw) : []); }
     catch{ return new Set(); }
   }
   function saveDone(set){ localStorage.setItem(PROG_KEY, JSON.stringify(Array.from(set))); }
-
-  function markLessonDone(n){
-    const set = getDoneSet(); set.add(Number(n)); saveDone(set);
-    byId('finishMsg-3').textContent = 'Урок 3 завершён ✓';
-    updateProgressVisual();
-    launchConfetti(160);
+  function updateProgressVisual(){
+    const set = getDoneSet();
+    const pct = Math.round(clamp((set.size/12)*100, 0, 100));
+    const bar = byId('progressBar'); if(bar){ bar.style.width = (pct>0 ? pct + '%' : '6px'); bar.title = `Прогресс: ${pct}%`; }
+    const t = byId('progressText'); if(t) t.textContent = pct + '%';
   }
+  updateProgressVisual();
+  try{ localStorage.setItem(LAST_KEY, '3'); }catch{}
 
+  /* ===== Завершение урока ===== */
+  function markLessonDone(n){
+    const set = getDoneSet(); set.add(Number(n)); saveDone(set); updateProgressVisual();
+    localStorage.setItem(LAST_KEY, String(n));
+    byId('finishMsg-3').textContent = 'Урок 3 завершён ✓';
+    launchConfetti(180);
+  }
   (function bindFinish(){
     const btn = byId('btnFinishL3');
     const a = byId('r3a'), b = byId('r3b');
     if(!btn || !a || !b) return;
-    const sync = ()=>{
-      const ok = a.checked && b.checked;
-      btn.disabled = !ok;
-      btn.classList.toggle('locked', !ok);
-    };
+    const sync = ()=>{ const ok = a.checked && b.checked; btn.disabled = !ok; btn.classList.toggle('locked', !ok); };
     a.addEventListener('change', sync);
     b.addEventListener('change', sync);
     btn.addEventListener('click', ()=> markLessonDone(3));
     sync();
   })();
 
-  /* === Прогресс курса (верхняя полоска) === */
-  function updateProgressVisual(){
-    const set = getDoneSet();
-    const pct = Math.round(clamp((set.size/12)*100, 0, 100));
-    const bar = byId('progressBar');
-    if(bar){
-      bar.style.width = (pct>0 ? pct + '%' : '6px');
-      bar.title = `Прогресс: ${pct}%`;
-    }
-    const t = byId('progressText');
-    if(t) t.textContent = pct + '%';
-  }
-  updateProgressVisual();
-
-  /* === Кнопка «Наверх» === */
+  /* ===== Наверх ===== */
   const toTop = byId('toTop');
   const onScroll = ()=>{ const show = window.scrollY > 400; toTop?.classList.toggle('show', show); };
   window.addEventListener('scroll', onScroll, {passive:true});
   toTop?.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
   onScroll();
-
-  /* === Конфетти === */
-  const canvas = byId('confettiCanvas');
-  const ctx = canvas.getContext('2d');
-  let W=0,H=0, particles=[], rafId=null;
-  function resize(){ W = canvas.width  = window.innerWidth; H = canvas.height = window.innerHeight; }
-  window.addEventListener('resize', resize); resize();
-
-  function spawn(n){
-    for(let i=0;i<n;i++){
-      particles.push({
-        x: Math.random()*W, y: -10,
-        vx: (Math.random()-0.5)*6, vy: Math.random()*2+2,
-        g: 0.05 + Math.random()*0.12,
-        w: 6+Math.random()*8, h: 10+Math.random()*14,
-        rot: Math.random()*Math.PI, vr: (Math.random()-0.5)*0.2,
-        alpha: 1
-      });
-    }
-  }
-  function step(){
-    ctx.clearRect(0,0,W,H);
-    particles.forEach(p=>{
-      p.vy += p.g; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.alpha -= 0.004;
-      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.globalAlpha = Math.max(0,p.alpha);
-      const grd = ctx.createLinearGradient(-p.w, -p.h, p.w, p.h);
-      grd.addColorStop(0,'#7aa2ff'); grd.addColorStop(0.5,'#ff86c2'); grd.addColorStop(1,'#ffa15a');
-      ctx.fillStyle = grd; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore();
-    });
-    particles = particles.filter(p=> p.alpha>0 && p.y<H+40);
-    if(particles.length>0){ rafId = requestAnimationFrame(step); }
-    else { cancelAnimationFrame(rafId); rafId=null; }
-  }
-  function launchConfetti(n=120){ spawn(n); if(!rafId) rafId = requestAnimationFrame(step); }
-  window.launchConfetti = launchConfetti;
-  byId('btnTestConfetti')?.addEventListener('click', ()=> launchConfetti(140));
 })();
 </script>
 </body>
