@@ -168,7 +168,7 @@
       <div class="logo" aria-hidden="true"></div>
       <div>
         <h1>Урок 2. Типографика и изображения</h1>
-        <div class="subtitle">Хук → Теория → Мини-практика → Проект → Самостоятельно → Рефлексия</div>
+        <div class="subtitle">Хук → Теория → Мини-практика → Проверь себя → Проект → Самостоятельно → Рефлексия</div>
       </div>
     </div>
 
@@ -194,6 +194,7 @@
         <div class="step active" data-step="hook"       data-target="screen-hook">Введение</div>
         <div class="step"         data-step="theory"     data-target="screen-theory">Теория</div>
         <div class="step"         data-step="practice"   data-target="screen-practice">Мини-практика</div>
+        <div class="step"         data-step="memory"     data-target="screen-memory">Проверь себя</div>
         <div class="step"         data-step="project"    data-target="screen-project">Проект</div>
         <div class="step"         data-step="independent"data-target="screen-independent">Самостоятельно</div>
         <div class="step"         data-step="reflection" data-target="screen-reflection">Рефлексия</div>
@@ -374,7 +375,49 @@ console.log('Demo L2 running');</textarea>
           </div>
 
           <div class="toolbar">
-            <button class="btn locked" id="l2-next" data-next="project" type="button" disabled>К проекту У2 →</button>
+            <button class="btn locked" id="l2-next" data-next="memory" type="button" disabled>К «Проверь себя» →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Проверь себя -->
+    <section id="screen-memory" class="screen" role="region" aria-label="Проверь себя">
+      <div class="content">
+        <div class="task-surface">
+          <h3>Проверка на запоминание</h3>
+
+          <div class="practice">
+            <div class="q">Верно или неверно: для декоративных изображений <code>alt</code> должен быть пустым (<code>alt=""</code>).</div>
+            <div class="a">
+              <button class="btn" data-choice="true"  data-group="l2-quiz-1" type="button">Верно</button>
+              <button class="btn" data-choice="false" data-group="l2-quiz-1" type="button">Неверно</button>
+              <span id="l2-quiz-1-status" aria-live="polite"></span>
+            </div>
+          </div>
+
+          <div class="practice">
+            <div class="q">Какой элемент используют для подписи к изображению в паре с <code>&lt;figure&gt;</code>?</div>
+            <div class="a">
+              <button class="btn" data-choice="figcaption" data-group="l2-quiz-2" type="button">&lt;figcaption&gt;</button>
+              <button class="btn" data-choice="caption"    data-group="l2-quiz-2" type="button">&lt;caption&gt;</button>
+              <button class="btn" data-choice="label"      data-group="l2-quiz-2" type="button">&lt;label&gt;</button>
+              <span id="l2-quiz-2-status" aria-live="polite"></span>
+            </div>
+          </div>
+
+          <div class="practice">
+            <div class="q">Что помогает снизить «прыжки» макета (CLS) для изображений?</div>
+            <div class="a">
+              <button class="btn" data-choice="widthheight" data-group="l2-quiz-3" type="button">Указать width/height</button>
+              <button class="btn" data-choice="loading"      data-group="l2-quiz-3" type="button">Только loading="lazy"</button>
+              <button class="btn" data-choice="role"         data-group="l2-quiz-3" type="button">role="img"</button>
+              <span id="l2-quiz-3-status" aria-live="polite"></span>
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <button class="btn locked" id="l2-next-to-project" data-next="project" type="button" disabled>К проекту У2 →</button>
           </div>
         </div>
       </div>
@@ -691,6 +734,40 @@ console.log('Статья готова!');
     b.disabled = !allOk; b.classList.toggle('locked', !allOk);
   }
 
+  /* ===== Проверь себя (квиз) ===== */
+  document.addEventListener('click', (e)=>{
+    const btn = e.target.closest('[data-choice][data-group]');
+    if(!btn) return;
+    const group = btn.getAttribute('data-group');
+    if(!/^l2-quiz-/.test(group)) return;
+
+    const val = btn.getAttribute('data-choice');
+    const status = byId(`${group}-status`);
+    const ok = isQuizCorrect(group, val);
+
+    if(status){ status.textContent = ok ? 'Верно' : 'Неверно'; status.className = ok ? 'ok' : 'err'; }
+    if(ok) launchConfetti();
+    tryUnlockMemoryNext();
+  });
+
+  function isQuizCorrect(group, val){
+    switch(group){
+      case 'l2-quiz-1': return val === 'true';
+      case 'l2-quiz-2': return val === 'figcaption';
+      case 'l2-quiz-3': return val === 'widthheight';
+      default: return false;
+    }
+  }
+
+  function tryUnlockMemoryNext(){
+    const ok1 = byId('l2-quiz-1-status')?.className==='ok';
+    const ok2 = byId('l2-quiz-2-status')?.className==='ok';
+    const ok3 = byId('l2-quiz-3-status')?.className==='ok';
+    const allOk = ok1 && ok2 && ok3;
+    const b = byId('l2-next-to-project'); if(!b) return;
+    b.disabled = !allOk; b.classList.toggle('locked', !allOk);
+  }
+
   /* ===== Подсказки для проекта ===== */
   function getHint(key){
     const H = {
@@ -735,7 +812,7 @@ console.log('Статья готова!');
   });
   byId('btnRunOneT2')?.addEventListener('click', ()=>{ byId('outT2').srcdoc = byId('codeT2-one').value; });
 
-  /* ===== ПРОВЕРКА мини-проекта (новое) ===== */
+  /* ===== ПРОВЕРКА мини-проекта ===== */
   document.addEventListener('click', (e)=>{
     const checkBtn = e.target.closest('[data-check="t2"]');
     if (!checkBtn) return;

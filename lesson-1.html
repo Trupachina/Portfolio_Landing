@@ -952,7 +952,7 @@ console.log('Привет из скрипта визитки!');
     const btn = byId('btnFinishL1');
     const a = byId('r1a'), b = byId('r1b');
     if(!btn || !a || !b) return;
-    const sync = ()=>{ const ok = a.checked && b.checked; btn.disabled = !ок; btn.classList.toggle('locked', !ок); };
+    const sync = ()=>{ const ok = a.checked && b.checked; btn.disabled = !ok; btn.classList.toggle('locked', !ok); };
     a.addEventListener('change', sync); b.addEventListener('change', sync);
     btn.addEventListener('click', ()=> markLessonDone(1));
     sync();
