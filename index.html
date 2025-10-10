@@ -10,121 +10,134 @@
     --sans: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
     --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "JetBrains Mono", monospace;
 
-    --ink:#0b0f14; --muted:#6b7280; --card:#fff;
-    --blue:#6366f1; --pink:#ec4899; --orange:#f59e0b; --green:#10b981;
-    --ring:rgba(99,102,241,.25); --shadow:0 20px 60px rgba(20,20,40,.18);
-    --radius:18px; --wrap:1100px; --font-size:16px; --spacing:18px;
+    /* Пастельные тона */
+    --ink:#1f2937;           /* тёмный текст, мягче черного */
+    --muted:#6b7280; --card:#fff;
+    --violet:#c4b5fd;        /* пастельный фиолетовый */
+    --pink:#f9a8d4;          /* пастельный розовый */
+    --peach:#ffd1a6;         /* мягкий персик для акцентов */
+    --ring:rgba(216,180,254,.55); /* светлое фиолетовое фокус-кольцо */
+
+    --shadow:0 18px 50px rgba(31,41,55,.16);
+    --radius:18px; --wrap:1100px;
+    --font-size:16px; --spacing:18px;
   }
 
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{
-    margin:0; color:var(--ink); font:var(--font-size)/1.6 var(--sans);
+    margin:0; color:var(--ink); font:var(--font-size)/1.65 var(--sans);
     min-height:100svh;
+
+    /* Мягкий пастельный фон без повторов */
     background:
-      radial-gradient(1200px 800px at 85% 10%, rgba(236,72,153,.25), transparent 60%),
-      radial-gradient(900px 700px at 10% 20%, rgba(99,102,241,.30), transparent 65%),
-      radial-gradient(1000px 800px at 50% 120%, rgba(245,158,11,.22), transparent 60%),
-      linear-gradient(120deg, #5b21b6 0%, #7c3aed 35%, #db2777 68%, #fb923c 100%);
+      radial-gradient(900px 600px at 85% 8%, rgba(249,168,212,.35), transparent 60%),
+      radial-gradient(900px 700px at 12% 25%, rgba(196,181,253,.38), transparent 65%),
+      radial-gradient(900px 700px at 50% 120%, rgba(255,209,166,.28), transparent 60%),
+      linear-gradient(120deg, #fde7f2 0%, #efe9ff 35%, #e7ecff 70%, #ffe8ee 100%);
     background-repeat:no-repeat;
     background-size:cover;
     animation:bg-move 20s ease-in-out infinite alternate;
   }
   @keyframes bg-move{
     0%{ background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0% }
-    100%{ background-position: 5% 2%, 3% 1%, 0% 5%, 100% 100% }
+    100%{ background-position: 5% 2%, 3% 1%, 0% 6%, 100% 100% }
   }
 
   .wrap{max-width:var(--wrap); margin:0 auto; padding:clamp(14px,3vw,24px)}
   header{
     position:sticky; top:0; z-index:10;
-    backdrop-filter:saturate(150%) blur(10px);
-    background:rgba(255,255,255,.75);
+    backdrop-filter:saturate(140%) blur(10px);
+    background:rgba(255,255,255,.78);
     border-bottom:1px solid rgba(0,0,0,.06);
   }
   .brand{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
   .logo{width:42px; height:42px; border-radius:14px;
-    background:radial-gradient(120% 140% at 20% 20%, #fff 0%, #ffd4e6 48%, #e8f0ff 92%);
-    box-shadow:0 0 0 2px rgba(255,255,255,.75), inset 0 0 18px rgba(99,102,241,.28);
+    background:radial-gradient(120% 140% at 20% 20%, #fff 0%, #ffe5f2 48%, #f1f4ff 92%);
+    box-shadow:0 0 0 2px rgba(255,255,255,.8), inset 0 0 18px rgba(196,181,253,.35);
   }
-  h1{margin:0; font-weight:900; letter-spacing:.2px; font-size:clamp(20px,2.6vw,28px)}
+
+  /* МЕНЕЕ ЖИРНЫЕ ЗАГОЛОВКИ */
+  h1{margin:0; font-weight:700; letter-spacing:.2px; font-size:clamp(20px,2.6vw,28px)}
   .subtitle{color:#334155; font-size:13px; margin-top:2px}
 
   .topbar{display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:10px}
   .progress{display:flex; align-items:center; gap:8px}
-  .progress .bar{width:min(42vw,280px); height:10px; background:#eef2ff; border-radius:999px; overflow:hidden}
-  .progress .bar i{display:block; height:100%; width:0%; background:linear-gradient(90deg,#7aa2ff,#ff86c2)}
-  .progress .txt{font:700 12px var(--mono); color:#102a43}
+  .progress .bar{width:min(42vw,280px); height:10px; background:#f5f7ff; border-radius:999px; overflow:hidden}
+  .progress .bar i{display:block; height:100%; width:0%;
+    background:linear-gradient(90deg,#b7c4ff,#f9a8d4)}
+  .progress .txt{font:600 12px var(--mono); color:#102a43}
 
+  /* КНОПКИ — легче по весу */
   .btn{
     display:inline-flex; align-items:center; gap:8px; padding:11px 14px;
     border-radius:14px; border:1px solid rgba(0,0,0,.06);
-    background:#fff; font-weight:800; cursor:pointer; text-decoration:none; color:inherit;
-    box-shadow:0 12px 28px rgba(0,0,0,.08);
+    background:#fff; font-weight:600; cursor:pointer; text-decoration:none; color:inherit;
+    box-shadow:0 10px 26px rgba(31,41,55,.10);
   }
-  .btn.primary{background:linear-gradient(180deg,#fff,#f8fbff)}
+  .btn.primary{background:linear-gradient(180deg,#fff,#f9fbff)}
   .btn:focus-visible{outline:3px solid var(--ring); outline-offset:3px}
 
   .card{
     background:linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.86));
-    border:1px solid rgba(0,0,0,.06); border-radius:var(--radius); box-shadow:var(--shadow);
+    border:1px solid rgba(0,0,0,.05); border-radius:var(--radius); box-shadow:var(--shadow);
     margin-bottom:var(--spacing);
   }
   .card .hd{display:flex; align-items:center; justify-content:space-between; padding:16px 18px; border-bottom:1px solid rgba(0,0,0,.06)}
-  .card .hd h2{margin:0; font-size:clamp(18px,2.2vw,22px)}
+  .card .hd h2{margin:0; font-weight:650; font-size:clamp(18px,2.2vw,22px)}
   .content{padding:16px 18px 18px}
-
-  .badge{font:700 11px/1 var(--mono); padding:6px 8px; border-radius:999px; background:#eef2ff; border:1px solid #dbe3ff; color:#102a43}
-  .pill{padding:6px 10px; border-radius:999px; background:#f6f9ff; border:1px solid rgba(0,0,0,.06); font:600 12px/1 var(--mono)}
   .lead{font-size:clamp(16px,2.2vw,20px); color:#0b0f14}
 
-  /* Список уроков в стиле «карточки дорожки» */
+  .badge{font:600 11px/1 var(--mono); padding:6px 8px; border-radius:999px; background:#f3e8ff; border:1px solid #eadcff; color:#453a66}
+  .pill{padding:6px 10px; border-radius:999px; background:#fff0f6; border:1px solid #ffe3ef; font:600 12px/1 var(--mono)}
+
+  /* Список уроков */
   ol.syllabus{list-style:none; padding:0; margin:10px 0 0; display:grid; gap:10px}
   .lesson{
     display:flex; align-items:center; justify-content:space-between; gap:12px;
     background:#fff; border:1px solid rgba(0,0,0,.06); border-radius:14px; padding:12px 14px;
-    text-decoration:none; color:#0b0f14; font-weight:800;
+    text-decoration:none; color:#0b0f14; font-weight:600;
   }
   .lesson:hover{transform:translateY(-1px)}
-  .lesson .badge-sm{font:700 10px var(--mono); background:#f1f5ff; border:1px solid #e1eaff; padding:4px 6px; border-radius:999px}
+  .lesson .badge-sm{font:600 10px var(--mono); background:#f4f3ff; border:1px solid #ebe9ff; padding:4px 6px; border-radius:999px}
   .lesson .dot{width:10px; height:10px; border-radius:50%; background:#e5e7eb; margin-right:6px}
-  .lesson.done .dot{background:linear-gradient(180deg,#34d399,#059669)}
-  .lesson .right{display:flex; align-items:center; gap:10px}
+  .lesson.done .dot{background:linear-gradient(180deg,#a7f3d0,#6ee7b7)}
 
+  /* Постер */
   .poster{min-height:58svh; display:grid; place-items:center; text-align:center; color:#0b0f14}
   .poster .inner{
     max-width:920px;
-    background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,.84));
-    border:1px solid rgba(0,0,0,.06); border-radius:24px; box-shadow:0 30px 80px rgba(0,0,0,.14);
+    background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(255,255,255,.86));
+    border:1px solid rgba(0,0,0,.05); border-radius:24px; box-shadow:0 26px 70px rgba(31,41,55,.14);
     padding:clamp(20px,6vw,48px);
   }
   .poster h2{
     font-size:clamp(28px,5vw,56px); line-height:1.05; margin:0 0 12px;
-    background:linear-gradient(90deg,#7aa2ff,#ff86c2,#ffa15a); -webkit-background-clip:text; background-clip:text; color:transparent;
-    font-weight:900;
+    background:linear-gradient(90deg,#c7d2fe,#f9a8d4,#ffd9b3);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    font-weight:750;
   }
   .poster p{margin:0 0 16px}
 
-  /* «Где вдохновляться» */
+  /* Вдохновение */
   .inspo{display:grid; gap:10px; padding:0; margin:0; list-style:none}
   .inspo li{
-    background:#fff; border:1px solid rgba(0,0,0,.06); border-radius:14px; padding:12px 14px; box-shadow:0 10px 26px rgba(0,0,0,.08)
+    background:#fff; border:1px solid rgba(0,0,0,.05); border-radius:14px; padding:12px 14px; box-shadow:0 10px 24px rgba(31,41,55,.10)
   }
-  .inspo a{font-weight:900; text-decoration:none}
+  .inspo a{font-weight:650; text-decoration:none}
   .inspo a:focus-visible{outline:3px solid var(--ring); outline-offset:3px}
 
-  /* Наверх */
+  /* Наверх и конфетти — как было */
   #toTop{
     position:fixed; right:16px; bottom:16px; z-index:50;
     padding:12px 14px; border-radius:999px; border:1px solid rgba(0,0,0,.06);
-    background:#ffffff; font:800 14px var(--sans); cursor:pointer;
+    background:#ffffff; font:700 14px var(--sans); cursor:pointer;
     box-shadow:0 10px 30px rgba(0,0,0,.2);
     opacity:0; pointer-events:none; transition:opacity .2s, transform .2s;
   }
   #toTop.show{ opacity:1; pointer-events:auto }
   #toTop:hover{ transform:translateY(-2px) }
 
-  /* Канвас для эмодзи-конфетти */
   #confettiCanvas{position:fixed; inset:0; pointer-events:none; z-index:60}
 </style>
 </head>
