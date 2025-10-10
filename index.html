@@ -10,13 +10,8 @@
     --sans: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
     --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "JetBrains Mono", monospace;
 
-    /* Пастельные тона */
-    --ink:#1f2937;           /* тёмный текст, мягче черного */
-    --muted:#6b7280; --card:#fff;
-    --violet:#d19cff;        /* пастельный фиолетовый */
-    --pink:#f3b0c8;          /* пастельный розовый */
-    --peach:#ffd9a3;         /* мягкий персик для акцентов */
-    --ring:rgba(216,180,254,.55); /* светлое фиолетовое фокус-кольцо */
+    --ink:#1f2937; --muted:#6b7280; --card:#fff;
+    --ring:rgba(216,180,254,.55);
 
     --shadow:0 18px 50px rgba(31,41,55,.16);
     --radius:18px; --wrap:1100px;
@@ -27,28 +22,37 @@
   html{scroll-behavior:smooth}
   body{
     margin:0; color:var(--ink); font:var(--font-size)/1.65 var(--sans);
-    min-height:100svh;
+    min-height:100svh; overflow-x:hidden;
 
-    /* Мягкий пастельный фон без повторов */
+    /* тот же многослойный анимированный градиент, что и в уроке */
     background:
-      radial-gradient(900px 600px at 85% 8%, rgba(249,168,212,.35), transparent 60%),
+      radial-gradient(900px 600px at 85% 8%,  rgba(249,168,212,.35), transparent 60%),
       radial-gradient(900px 700px at 12% 25%, rgba(196,181,253,.38), transparent 65%),
       radial-gradient(900px 700px at 50% 120%, rgba(255,209,166,.28), transparent 60%),
-      linear-gradient(120deg, #fde7f2 0%, #efe9ff 35%, #e7ecff 70%, #ffe8ee 100%);
+      linear-gradient(135deg, #ffd485 0%, #ffb4c7 52%, #c87bff 100%);
     background-repeat:no-repeat;
-    background-size:cover;
-    animation:bg-move 20s ease-in-out infinite alternate;
+    background-size:160% 160%;
+    animation:bg-move 26s ease-in-out infinite alternate;
   }
   @keyframes bg-move{
-    0%{ background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0% }
-    100%{ background-position: 5% 2%, 3% 1%, 0% 6%, 100% 100% }
+    0%  { background-position: 0% 40%, 20% 20%, 60% 90%, 0% 0% }
+    50% { background-position: 80% 10%, 10% 40%, 40% 120%, 60% 40% }
+    100%{ background-position: 50% 0%, 0% 60%, 50% 100%, 100% 60% }
   }
+
+  /* точки — под контентом */
+  body::before{
+    content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image: radial-gradient(circle at 1px 1px, rgba(115,112,216,.20) 1px, transparent 1.5px);
+    background-size:18px 18px; opacity:.45;
+  }
+  header, main, footer, #toTop{ position:relative; z-index:1; }
 
   .wrap{max-width:var(--wrap); margin:0 auto; padding:clamp(14px,3vw,24px)}
   header{
     position:sticky; top:0; z-index:10;
     backdrop-filter:saturate(140%) blur(10px);
-    background:rgba(255,255,255,.78);
+    background:rgba(255,255,255,.82);
     border-bottom:1px solid rgba(0,0,0,.06);
   }
   .brand{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
@@ -57,18 +61,15 @@
     box-shadow:0 0 0 2px rgba(255,255,255,.8), inset 0 0 18px rgba(196,181,253,.35);
   }
 
-  /* МЕНЕЕ ЖИРНЫЕ ЗАГОЛОВКИ */
   h1{margin:0; font-weight:700; letter-spacing:.2px; font-size:clamp(20px,2.6vw,28px)}
   .subtitle{color:#334155; font-size:13px; margin-top:2px}
 
   .topbar{display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:10px}
   .progress{display:flex; align-items:center; gap:8px}
   .progress .bar{width:min(42vw,280px); height:10px; background:#f5f7ff; border-radius:999px; overflow:hidden}
-  .progress .bar i{display:block; height:100%; width:0%;
-    background:linear-gradient(90deg,#b7c4ff,#f9a8d4)}
+  .progress .bar i{display:block; height:100%; width:0%; background:linear-gradient(90deg,#b7c4ff,#f9a8d4)}
   .progress .txt{font:600 12px var(--mono); color:#102a43}
 
-  /* КНОПКИ — легче по весу */
   .btn{
     display:inline-flex; align-items:center; gap:8px; padding:11px 14px;
     border-radius:14px; border:1px solid rgba(0,0,0,.06);
@@ -119,26 +120,28 @@
   }
   .poster p{margin:0 0 16px}
 
-  /* Вдохновение */
+  /* Переключатель режима редактора */
+  .seg{
+    display:inline-grid; grid-auto-flow:column; gap:0; border-radius:12px; overflow:hidden;
+    border:1px solid rgba(0,0,0,.07); background:#fff;
+  }
+  .seg input{position:absolute; opacity:0; pointer-events:none}
+  .seg label{padding:8px 12px; font:600 12px var(--mono); cursor:pointer; user-select:none; border-right:1px solid rgba(0,0,0,.06)}
+  .seg label:last-child{border-right:none}
+  .seg input:checked + label{background:linear-gradient(180deg,#f7f7ff,#f2f3ff); box-shadow:inset 0 0 0 2px #e4e7ff}
+
+  /* Вдохновение (референсы) */
   .inspo{display:grid; gap:10px; padding:0; margin:0; list-style:none}
   .inspo li{
-    background:#fff; border:1px solid rgba(0,0,0,.05); border-radius:14px; padding:12px 14px; box-shadow:0 10px 24px rgba(31,41,55,.10)
+    background:#fff; border:1px solid rgba(0,0,0,.05); border-radius:14px; padding:12px 14px;
+    box-shadow:0 10px 24px rgba(31,41,55,.10)
   }
   .inspo a{font-weight:650; text-decoration:none}
   .inspo a:focus-visible{outline:3px solid var(--ring); outline-offset:3px}
 
-  /* Наверх и конфетти — как было */
-  #toTop{
-    position:fixed; right:16px; bottom:16px; z-index:50;
-    padding:12px 14px; border-radius:999px; border:1px solid rgba(0,0,0,.06);
-    background:#ffffff; font:700 14px var(--sans); cursor:pointer;
-    box-shadow:0 10px 30px rgba(0,0,0,.2);
-    opacity:0; pointer-events:none; transition:opacity .2s, transform .2s;
-  }
-  #toTop.show{ opacity:1; pointer-events:auto }
-  #toTop:hover{ transform:translateY(-2px) }
-
-  #confettiCanvas{position:fixed; inset:0; pointer-events:none; z-index:60}
+  #toTop{position:fixed; right:16px; bottom:16px; z-index:50; padding:12px 14px; border-radius:999px; border:1px solid rgba(0,0,0,.06); background:#fff; font:700 14px var(--sans); box-shadow:0 10px 30px rgba(0,0,0,.2); opacity:0; pointer-events:none; transition:opacity .2s,transform .2s}
+  #toTop.show{opacity:1; pointer-events:auto}
+  #toTop:hover{transform:translateY(-2px)}
 </style>
 </head>
 
@@ -154,7 +157,6 @@
     </div>
 
     <div class="topbar" role="region" aria-label="Прогресс">
-      <div class="badge">Работает офлайн</div>
       <div class="progress" id="progress" aria-live="polite">
         <div class="bar" aria-label="Прогресс курса"><i id="progressBar"></i></div>
         <span id="progressText" class="txt">0%</span>
@@ -172,19 +174,44 @@
       <div class="k" style="display:flex; gap:8px; flex-wrap:wrap">
         <span class="pill">Новичкам и подросткам</span>
         <span class="pill">Шаги по 5–10 минут</span>
-        <span class="pill">Работает офлайн</span>
       </div>
 
       <div class="card" style="margin-top:12px">
         <div class="hd"><h2>Содержание</h2></div>
         <div class="content">
+          <!-- Статический список уроков -->
           <ol class="syllabus" id="syllabus">
-            <!-- генерируется скриптом для отметки выполненных уроков -->
+            <li><a class="lesson" data-n="1"  href="lesson-1.html"><span style="display:flex;align-items:center;gap:10px"><span class="dot" aria-hidden="true"></span>У1 — Семантика и каркас</span><span class="right"><span class="badge-sm">Открыть</span> →</span></a></li>
+            <li><a class="lesson" data-n="2"  href="lesson-2.html"><span style="display:flex;align-items:center;gap:10px"><span class="dot" aria-hidden="true"></span>У2 — Типографика и изображения</span><span class="right"><span class="badge-sm">Открыть</span> →</span></a></li>
+            <li><a class="lesson" data-n="3"  href="lesson-3.html"><span style="display:flex;align-items:center;gap:10px"><span class="dot" aria-hidden="true"></span>У3 — Цвет, контраст, фокус</span><span class="right"><span class="badge-sm">Открыть</span> →</span></a></li>
+            <li><a class="lesson" data-n="4"  href="lesson-4.html"><span style="display:flex;align-items:center;gap:10px"><span class="dot" aria-hidden="true"></span>У4 — Коробочная модель</span><span class="right"><span class="badge-sm">Открыть</span> →</span></a></li>
+            <li><a class="lesson" data-n="5"  href="lesson-5.html"><span style="display:flex;align-items:center;gap:10px"><span class="dot" aria-hidden="true"></span>У5 — Flexbox</span><span class="right"><span class="badge-sm">Открыть</span> →</span></a></li>
+            <li><a class="lesson" data-n="6"  href="lesson-6.html"><span style="display:flex;align-items:center;gap:10px"><span class="dot" aria-hidden="true"></span>У6 — Grid: колонки и gap</span><span class="right"><span class="badge-sm">Открыть</span> →</span></a></li>
+            <li><a class="lesson" data-n="7"  href="lesson-7.html"><span style="display:flex;align-items:center;gap:10px"><span class="dot" aria-hidden="true"></span>У7 — Grid: auto-fit/minmax</span><span class="right"><span class="badge-sm">Открыть</span> →</span></a></li>
+            <li><a class="lesson" data-n="8"  href="lesson-8.html"><span style="display:flex;align-items:center;gap:10px"><span class="dot" aria-hidden="true"></span>У8 — Респонсив/контейнерные</span><span class="right"><span class="badge-sm">Открыть</span> →</span></a></li>
+            <li><a class="lesson" data-n="9"  href="lesson-9.html"><span style="display:flex;align-items:center;gap:10px"><span class="dot" aria-hidden="true"></span>У9 — JS: события/toggle</span><span class="right"><span class="badge-sm">Открыть</span> →</span></a></li>
+            <li><a class="lesson" data-n="10" href="lesson-10.html"><span style="display:flex;align-items:center;gap:10px"><span class="dot" aria-hidden="true"></span>У10 — localStorage</span><span class="right"><span class="badge-sm">Открыть</span> →</span></a></li>
+            <li><a class="lesson" data-n="11" href="lesson-11.html"><span style="display:flex;align-items:center;gap:10px"><span class="dot" aria-hidden="true"></span>У11 — Формы/валидация</span><span class="right"><span class="badge-sm">Открыть</span> →</span></a></li>
+            <li><a class="lesson" data-n="12" href="lesson-12.html"><span style="display:flex;align-items:center;gap:10px"><span class="dot" aria-hidden="true"></span>У12 — Итоговый проект</span><span class="right"><span class="badge-sm">Открыть</span> →</span></a></li>
           </ol>
-          <div class="toolbar" style="display:flex; gap:10px; margin-top:12px">
+
+          <div class="toolbar" style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap">
             <a class="btn primary" id="btnContinue" href="#" role="button">Продолжить с места →</a>
-            <button class="btn" id="btnConfetti" type="button" title="Проверка конфетти">Проверить конфетти ✨</button>
           </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <div class="hd"><h2>Настройки редактора</h2></div>
+        <div class="content">
+          <p style="margin-top:0">Выберите, как показывать код в заданиях. Настройка применится ко всем урокам.</p>
+          <div class="seg" role="tablist" aria-label="Режим редактора" id="editorSeg">
+            <input id="mode-single" type="radio" name="edmode" value="single">
+            <label for="mode-single" role="tab" aria-controls="editor-single">Один файл</label>
+            <input id="mode-split"  type="radio" name="edmode" value="split">
+            <label for="mode-split"  role="tab" aria-controls="editor-split">HTML+CSS+JS</label>
+          </div>
+          <div id="modeStatus" class="badge" style="margin-left:10px">Режим: …</div>
         </div>
       </div>
     </div>
@@ -203,6 +230,7 @@
     </div>
   </section>
 
+  <!-- ВОЗВРАТ РЕФЕРЕНСОВ -->
   <section class="card" aria-label="Где вдохновляться">
     <div class="hd"><h2>Где вдохновляться</h2></div>
     <div class="content">
@@ -215,42 +243,43 @@
         <li><a href="https://www.lapa.ninja/" target="_blank" rel="noopener noreferrer">Lapa Ninja</a> — быстрые референсы для лендингов: хедеры, прайс-блоки, футеры и формы подписки.</li>
         <li><a href="https://collectui.com/" target="_blank" rel="noopener noreferrer">Collect UI</a> — UI-паттерны по категориям: signin, onboarding, pricing, 404 и прочее; удобно сравнивать варианты одного экрана.</li>
         <li><a href="https://webflow.com/discover" target="_blank" rel="noopener noreferrer">Webflow Showcase</a> — проекты сообщества Webflow; изучайте структуру, гриды и анимации, часть работ можно клонировать.</li>
-        <li><a href="https://mobbin.com/" target="_blank" rel="noopener noreferrer">Mobbin</a> — большая база экранов iOS/Android из реальных приложений: флоу онбординга, оплаты, поиска, фильтров и т.п.</li>
+        <li><a href="https://mobbin.com/" target="_blank" rel="noopener noreferrer">Mobbin</a> — большая база экранов iOS/Android из реальных приложений: онбординг, оплата, поиск, фильтры и т.п.</li>
       </ul>
     </div>
   </section>
 </main>
 
-<footer class="wrap" style="text-align:center; padding:24px 16px; background:rgba(255,255,255,.78); border:1px solid rgba(0,0,0,.06); border-radius:16px; margin-bottom:24px">
+<footer class="wrap" style="text-align:center; padding:24px 16px; background:rgba(255,255,255,.82); border:1px solid rgba(0,0,0,.06); border-radius:16px; margin-bottom:24px">
   <div>© 2025</div>
   <div style="margin-top:6px; color:#6b7280; font-size:13px">Удачного обучения!</div>
 </footer>
 
-<canvas id="confettiCanvas" aria-hidden="true"></canvas>
 <button id="toTop" type="button" aria-label="Наверх">↑ Наверх</button>
 
 <script>
-/* ==== Course core (прогресс + навигация + эмодзи-конфетти) ==== */
+/* Прогресс + глобальные настройки (и фикс переключателя режима) */
 (function(){
   'use strict';
-  const $ = (s, r=document)=>r.querySelector(s);
+  const $  = (s, r=document)=>r.querySelector(s);
   const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
   const clamp = (v,min,max)=>Math.max(min,Math.min(max,v));
-  const PROG_KEY='courseDone', LAST_KEY='courseLast';
+  const PROG_KEY='courseDone', LAST_KEY='courseLast', EDITOR_KEY='editorMode';
 
+  /* -------- Прогресс -------- */
   function getDoneSet(){
     try{ return new Set(JSON.parse(localStorage.getItem(PROG_KEY) || '[]')); }
     catch{ return new Set(); }
   }
   function saveDone(set){ localStorage.setItem(PROG_KEY, JSON.stringify(Array.from(set))); }
-  function markLessonDone(n){ const set=getDoneSet(); set.add(+n); saveDone(set); localStorage.setItem(LAST_KEY, String(n)); updateProgressVisual(); }
-  function getLastLesson(){ const n = +localStorage.getItem(LAST_KEY); return Number.isFinite(n) && n>=1 && n<=12 ? n : 1; }
+  function getLastLesson(){
+    const n=+localStorage.getItem(LAST_KEY);
+    return Number.isFinite(n) && n>=1 && n<=12 ? n : 1;
+  }
   function updateProgressVisual(){
     const set = getDoneSet();
     const pct = Math.round(clamp((set.size/12)*100, 0, 100));
     const bar = $('#progressBar'); if(bar) bar.style.width = (pct>0 ? pct+'%' : '4px');
     const t = $('#progressText'); if(t) t.textContent = pct + '%';
-    // обновить отметки в списке
     $$('.lesson').forEach(a=>{
       const n = +a.dataset.n;
       a.classList.toggle('done', set.has(n));
@@ -259,90 +288,55 @@
     });
   }
 
-  /* ==== Генерация списка уроков (для отметки «готово») ==== */
-  const lessons = [
-    'У1 — Семантика и каркас','У2 — Типографика и изображения','У3 — Цвет, контраст, фокус',
-    'У4 — Коробочная модель','У5 — Flexbox','У6 — Grid: колонки и gap',
-    'У7 — Grid: auto-fit/minmax','У8 — Респонсив/контейнерные','У9 — JS: события/toggle',
-    'У10 — localStorage','У11 — Формы/валидация','У12 — Итоговый проект'
-  ];
-  const list = $('#syllabus');
-  if(list){
-    list.innerHTML = lessons.map((t,i)=>{
-      const n=i+1, href=`lesson-${n}.html`;
-      return `<li><a class="lesson" data-n="${n}" href="${href}">
-        <span style="display:flex;align-items:center;gap:10px"><span class="dot" aria-hidden="true"></span>${t}</span>
-        <span class="right"><span class="badge-sm">Открыть</span> →</span>
-      </a></li>`;
-    }).join('');
-  }
-
-  /* ==== Кнопка «Продолжить с места» ==== */
+  /* -------- Кнопка «Продолжить» -------- */
   $('#btnContinue')?.addEventListener('click', (e)=>{
     e.preventDefault();
-    const last = getLastLesson() || 1;
-    location.href = `lesson-${last}.html`;
+    location.href = `lesson-${getLastLesson()}.html`;
   });
 
-  /* ==== «Наверх» ==== */
+  /* -------- Наверх -------- */
   (function initToTop(){
     const btn = $('#toTop'); if(!btn) return;
     const onScroll = ()=> btn.classList.toggle('show', window.scrollY > 400);
-    window.addEventListener('scroll', onScroll, {passive:true});
-    btn.addEventListener('click', ()=>window.scrollTo({top:0, behavior:'smooth'}));
+    addEventListener('scroll', onScroll, {passive:true});
+    btn.addEventListener('click', ()=>scrollTo({top:0, behavior:'smooth'}));
     onScroll();
   })();
 
-  /* ==== Эмодзи-конфетти (🎉 ✨ 💜 + др.) ==== */
-  const canvas = $('#confettiCanvas');
-  const ctx = canvas.getContext('2d');
-  let W=0, H=0, particles=[], rafId=null;
-  const EMOJI = ['🎉','✨','💜','🎈','💥','🥳','🌟','💫','🎊','❤️'];
+  /* -------- Режим редактора (фикс) -------- */
+  if(!localStorage.getItem(EDITOR_KEY)) localStorage.setItem(EDITOR_KEY,'single');
 
-  function resize(){ if(!canvas) return; W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
-  window.addEventListener('resize', resize, {passive:true}); resize();
+  function getEditorMode(){
+    const v = localStorage.getItem(EDITOR_KEY);
+    return (v==='split' || v==='single') ? v : 'single';
+  }
+  function setEditorMode(mode){
+    const m = (mode==='split') ? 'split' : 'single';
+    localStorage.setItem(EDITOR_KEY, m);
+    updateModeUI();
+  }
+  function updateModeUI(){
+    const m = getEditorMode();
+    const a = $('#mode-single'), b = $('#mode-split');
+    if(a && b){ a.checked = (m==='single'); b.checked = (m==='split'); }
+    const st = $('#modeStatus'); if(st) st.textContent = 'Режим: ' + (m==='single' ? 'Один файл' : 'HTML+CSS+JS');
+  }
 
-  function spawnEmoji(n=80, customList){
-    const list = Array.isArray(customList)&&customList.length ? customList : EMOJI;
-    for(let i=0;i<n;i++){
-      particles.push({
-        x: Math.random()*W, y: -20,
-        vx: (Math.random()-0.5)*3, vy: Math.random()*1.5+1.8,
-        g: 0.03 + Math.random()*0.06,
-        rot: Math.random()*Math.PI*2, vr: (Math.random()-0.5)*0.08,
-        alpha: 1, size: 20 + Math.random()*18,
-        ch: list[(Math.random()*list.length)|0]
-      });
-    }
-  }
-  function step(){
-    ctx.clearRect(0,0,W,H);
-    particles.forEach(p=>{
-      p.vy += p.g; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.alpha -= 0.0038;
-      ctx.save();
-      ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.globalAlpha = Math.max(0,p.alpha);
-      ctx.font = `bold ${p.size}px system-ui, Apple Color Emoji, "Segoe UI Emoji"`;
-      ctx.textAlign='center'; ctx.textBaseline='middle';
-      ctx.fillText(p.ch, 0, 0);
-      ctx.restore();
-    });
-    particles = particles.filter(p=> p.alpha>0 && p.y < H+60);
-    if(particles.length){ rafId = requestAnimationFrame(step); }
-    else { cancelAnimationFrame(rafId); rafId = null; }
-  }
-  function emojiConfetti(n=90, list){
-    spawnEmoji(n, list);
-    if(!rafId) rafId = requestAnimationFrame(step);
-  }
-  $('#btnConfetti')?.addEventListener('click', ()=> emojiConfetti(120));
+  $('#editorSeg')?.addEventListener('click', (e)=>{
+    const lab = e.target.closest('label'); if(!lab) return;
+    setEditorMode(lab.getAttribute('for')==='mode-split' ? 'split' : 'single');
+  });
+  $('#mode-single')?.addEventListener('input', ()=> setEditorMode('single'));
+  $('#mode-split') ?.addEventListener('input', ()=> setEditorMode('split'));
+  $('#mode-single')?.addEventListener('change', ()=> setEditorMode('single'));
+  $('#mode-split') ?.addEventListener('change', ()=> setEditorMode('split'));
 
-  // Экспорт мини-API (чтобы уроки могли дергать конфетти и прогресс)
   window.Course = {
-    getDoneSet, saveDone, markLessonDone, getLastLesson, updateProgressVisual,
-    emojiConfetti
+    getDoneSet, saveDone, getLastLesson, updateProgressVisual,
+    getEditorMode, setEditorMode
   };
 
-  // Инициализация
+  updateModeUI();
   updateProgressVisual();
 })();
 </script>
