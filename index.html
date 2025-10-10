@@ -5,136 +5,143 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Мини-курс HTML/CSS/JS — 12 уроков</title>
 
-<!-- Шрифты (офлайн будет fallback на system-ui) -->
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet" />
-
 <style>
-:root{
-  --sans:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --ink:#0b0f14; --muted:#6b7280; --card:#fff;
-  --blue:#2563eb; --green:#10b981; --orange:#f59e0b;
-  --ring:rgba(37,99,235,.20); --shadow:0 10px 35px rgba(30,30,60,.10);
-  --radius:16px; --wrap:1100px; --font-size:16px; --spacing:16px;
-}
-body.mode-kids   { --font-size:18px; --spacing:24px; }
-body.mode-adults { --font-size:14px; --spacing:16px; }
+  :root{
+    --sans: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "JetBrains Mono", monospace;
 
-*{box-sizing:border-box}
-html,body{height:100%}
-html{scroll-behavior:smooth}
-body{
-  margin:0; color:var(--ink); font:var(--font-size)/1.55 var(--sans);
-  background:linear-gradient(120deg,#ff9a9e 0%,#fad0c4 25%,#fbc2eb 50%,#a18cd1 75%,#f6d365 100%);
-  background-size:200% 200%;
-  animation:gradientWalk 18s ease infinite;
-}
-@keyframes gradientWalk{
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
-}
-.wrap{max-width:var(--wrap); margin:0 auto; padding:var(--spacing)}
-header{
-  position:sticky; top:0; z-index:20;
-  background:rgba(255,255,255,.75); backdrop-filter:saturate(150%) blur(10px);
-  border-bottom:1px solid rgba(0,0,0,.06);
-}
-.brand{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
-.logo{width:40px; height:40px; border-radius:12px;
-  background:radial-gradient(120% 140% at 20% 20%, #fff 0%, #ffd4e6 48%, #e8f0ff 92%);
-  box-shadow:0 0 0 2px rgba(255,255,255,.75), inset 0 0 18px rgba(99,102,241,.25);
-}
-h1{margin:0; font-size:24px; font-weight:800}
-.subtitle{color:var(--muted); font-size:13px; margin-top:2px}
-.topbar{display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:10px}
+    --ink:#0b0f14; --muted:#6b7280; --card:#fff;
+    --blue:#6366f1; --pink:#ec4899; --orange:#f59e0b; --green:#10b981;
+    --ring:rgba(99,102,241,.25); --shadow:0 20px 60px rgba(20,20,40,.18);
+    --radius:18px; --wrap:1100px; --font-size:16px; --spacing:18px;
+  }
 
-.btn{
-  display:inline-flex; align-items:center; gap:8px; padding:9px 12px;
-  border-radius:12px; border:1px solid rgba(0,0,0,.06); background:#fff; font-weight:800; cursor:pointer;
-}
-.btn[aria-pressed="true"]{box-shadow:0 0 0 3px var(--ring);}
-.btn.primary{background:linear-gradient(180deg,#fff,#f8fbff)}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; color:var(--ink); font:var(--font-size)/1.6 var(--sans);
+    min-height:100svh;
+    background:
+      radial-gradient(1200px 800px at 85% 10%, rgba(236,72,153,.25), transparent 60%),
+      radial-gradient(900px 700px at 10% 20%, rgba(99,102,241,.30), transparent 65%),
+      radial-gradient(1000px 800px at 50% 120%, rgba(245,158,11,.22), transparent 60%),
+      linear-gradient(120deg, #5b21b6 0%, #7c3aed 35%, #db2777 68%, #fb923c 100%);
+    background-repeat:no-repeat;
+    background-size:cover;
+    animation:bg-move 20s ease-in-out infinite alternate;
+  }
+  @keyframes bg-move{
+    0%{ background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0% }
+    100%{ background-position: 5% 2%, 3% 1%, 0% 5%, 100% 100% }
+  }
 
-.progress{display:flex; align-items:center; gap:8px}
-.progress .bar{width:min(42vw,260px); height:8px; background:#eef2ff; border-radius:999px; overflow:hidden}
-.progress .bar i{display:block; height:100%; width:0%; background:linear-gradient(90deg,#7aa2ff,#ff86c2)}
-.progress .txt{font:700 12px var(--mono); color:#102a43}
+  .wrap{max-width:var(--wrap); margin:0 auto; padding:clamp(14px,3vw,24px)}
+  header{
+    position:sticky; top:0; z-index:10;
+    backdrop-filter:saturate(150%) blur(10px);
+    background:rgba(255,255,255,.75);
+    border-bottom:1px solid rgba(0,0,0,.06);
+  }
+  .brand{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+  .logo{width:42px; height:42px; border-radius:14px;
+    background:radial-gradient(120% 140% at 20% 20%, #fff 0%, #ffd4e6 48%, #e8f0ff 92%);
+    box-shadow:0 0 0 2px rgba(255,255,255,.75), inset 0 0 18px rgba(99,102,241,.28);
+  }
+  h1{margin:0; font-weight:900; letter-spacing:.2px; font-size:clamp(20px,2.6vw,28px)}
+  .subtitle{color:#334155; font-size:13px; margin-top:2px}
 
-.card{
-  background:linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.82));
-  border:1px solid rgba(0,0,0,.06);
-  border-radius:var(--radius); box-shadow:var(--shadow);
-  margin-bottom:var(--spacing);
-}
-.card .hd{display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid rgba(0,0,0,.06)}
-.card .hd h2{margin:0; font-size:18px}
-.content{padding:14px 16px 16px}
+  .topbar{display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:10px}
+  .progress{display:flex; align-items:center; gap:8px}
+  .progress .bar{width:min(42vw,280px); height:10px; background:#eef2ff; border-radius:999px; overflow:hidden}
+  .progress .bar i{display:block; height:100%; width:0%; background:linear-gradient(90deg,#7aa2ff,#ff86c2)}
+  .progress .txt{font:700 12px var(--mono); color:#102a43}
 
-.badge{font:700 11px/1 var(--mono); padding:6px 8px; border-radius:999px; background:#eef2ff; border:1px solid #dbe3ff; color:#102a43}
-.pill{padding:6px 10px; border-radius:999px; background:#f6f9ff; border:1px solid rgba(0,0,0,.06); font:600 12px/1 var(--mono)}
-.task-surface{background:linear-gradient(180deg,#fff,#fff6f7); border:1px solid rgba(0,0,0,.06); border-radius:16px; padding:12px}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px; padding:11px 14px;
+    border-radius:14px; border:1px solid rgba(0,0,0,.06);
+    background:#fff; font-weight:800; cursor:pointer; text-decoration:none; color:inherit;
+    box-shadow:0 12px 28px rgba(0,0,0,.08);
+  }
+  .btn.primary{background:linear-gradient(180deg,#fff,#f8fbff)}
+  .btn:focus-visible{outline:3px solid var(--ring); outline-offset:3px}
 
-.poster{min-height:60vh; display:grid; place-items:center; text-align:center; padding:min(8vh,80px) 16px; color:#0b0f14}
-.poster .inner{
-  max-width:900px;
-  background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,.82));
-  border:1px solid rgba(0,0,0,.06);
-  border-radius:24px;
-  box-shadow:0 30px 80px rgba(0,0,0,.12);
-  padding:clamp(24px,6vw,48px);
-}
-.poster h2{
-  font-size:clamp(28px,5vw,56px);
-  line-height:1.05;
-  margin:0 0 12px 0;
-  background:linear-gradient(90deg,#7aa2ff,#ff86c2,#ffa15a);
-  -webkit-background-clip:text; background-clip:text; color:transparent;
-  font-weight:800;
-}
-.poster p{font-size:clamp(16px,2.2vw,20px); color:#374151; margin:0 auto 16px auto}
-.poster .links{display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:4px}
-.poster .links a{
-  display:inline-flex; align-items:center; gap:10px;
-  padding:12px 16px; border-radius:999px; font-weight:800; text-decoration:none;
-  border:1px solid rgba(0,0,0,.06); background:#fff;
-  box-shadow:0 8px 24px rgba(0,0,0,.08); color:#0b0f14;
-}
-.poster .links a:hover{ transform:translateY(-1px) }
-.poster .links a:focus-visible{ outline:3px solid #7aa2ff; outline-offset:3px }
+  .card{
+    background:linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.86));
+    border:1px solid rgba(0,0,0,.06); border-radius:var(--radius); box-shadow:var(--shadow);
+    margin-bottom:var(--spacing);
+  }
+  .card .hd{display:flex; align-items:center; justify-content:space-between; padding:16px 18px; border-bottom:1px solid rgba(0,0,0,.06)}
+  .card .hd h2{margin:0; font-size:clamp(18px,2.2vw,22px)}
+  .content{padding:16px 18px 18px}
 
-.syllabus{margin:10px 0 0 18px}
-.syllabus a{text-decoration:none; font-weight:700}
+  .badge{font:700 11px/1 var(--mono); padding:6px 8px; border-radius:999px; background:#eef2ff; border:1px solid #dbe3ff; color:#102a43}
+  .pill{padding:6px 10px; border-radius:999px; background:#f6f9ff; border:1px solid rgba(0,0,0,.06); font:600 12px/1 var(--mono)}
+  .lead{font-size:clamp(16px,2.2vw,20px); color:#0b0f14}
 
-#toTop{
-  position:fixed; right:16px; bottom:16px; z-index:50;
-  padding:12px 14px; border-radius:999px; border:1px solid rgba(0,0,0,.06);
-  background:#ffffff; font:800 14px var(--sans); cursor:pointer;
-  box-shadow:0 10px 30px rgba(0,0,0,.2);
-  opacity:0; pointer-events:none; transition:opacity .2s, transform .2s;
-}
-#toTop.show{ opacity:1; pointer-events:auto }
-#toTop:hover{ transform:translateY(-2px) }
+  /* Список уроков в стиле «карточки дорожки» */
+  ol.syllabus{list-style:none; padding:0; margin:10px 0 0; display:grid; gap:10px}
+  .lesson{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    background:#fff; border:1px solid rgba(0,0,0,.06); border-radius:14px; padding:12px 14px;
+    text-decoration:none; color:#0b0f14; font-weight:800;
+  }
+  .lesson:hover{transform:translateY(-1px)}
+  .lesson .badge-sm{font:700 10px var(--mono); background:#f1f5ff; border:1px solid #e1eaff; padding:4px 6px; border-radius:999px}
+  .lesson .dot{width:10px; height:10px; border-radius:50%; background:#e5e7eb; margin-right:6px}
+  .lesson.done .dot{background:linear-gradient(180deg,#34d399,#059669)}
+  .lesson .right{display:flex; align-items:center; gap:10px}
 
-.sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;}
-@media(prefers-reduced-motion:reduce){ *{animation:none !important; transition:none !important} }
+  .poster{min-height:58svh; display:grid; place-items:center; text-align:center; color:#0b0f14}
+  .poster .inner{
+    max-width:920px;
+    background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,.84));
+    border:1px solid rgba(0,0,0,.06); border-radius:24px; box-shadow:0 30px 80px rgba(0,0,0,.14);
+    padding:clamp(20px,6vw,48px);
+  }
+  .poster h2{
+    font-size:clamp(28px,5vw,56px); line-height:1.05; margin:0 0 12px;
+    background:linear-gradient(90deg,#7aa2ff,#ff86c2,#ffa15a); -webkit-background-clip:text; background-clip:text; color:transparent;
+    font-weight:900;
+  }
+  .poster p{margin:0 0 16px}
+
+  /* «Где вдохновляться» */
+  .inspo{display:grid; gap:10px; padding:0; margin:0; list-style:none}
+  .inspo li{
+    background:#fff; border:1px solid rgba(0,0,0,.06); border-radius:14px; padding:12px 14px; box-shadow:0 10px 26px rgba(0,0,0,.08)
+  }
+  .inspo a{font-weight:900; text-decoration:none}
+  .inspo a:focus-visible{outline:3px solid var(--ring); outline-offset:3px}
+
+  /* Наверх */
+  #toTop{
+    position:fixed; right:16px; bottom:16px; z-index:50;
+    padding:12px 14px; border-radius:999px; border:1px solid rgba(0,0,0,.06);
+    background:#ffffff; font:800 14px var(--sans); cursor:pointer;
+    box-shadow:0 10px 30px rgba(0,0,0,.2);
+    opacity:0; pointer-events:none; transition:opacity .2s, transform .2s;
+  }
+  #toTop.show{ opacity:1; pointer-events:auto }
+  #toTop:hover{ transform:translateY(-2px) }
+
+  /* Канвас для эмодзи-конфетти */
+  #confettiCanvas{position:fixed; inset:0; pointer-events:none; z-index:60}
 </style>
 </head>
 
-<body class="mode-kids">
+<body>
 <header>
   <div class="wrap">
     <div class="brand" role="banner">
       <div class="logo" aria-hidden="true"></div>
       <div>
         <h1>Мини-курс HTML/CSS/JS — 12 уроков</h1>
+        <div class="subtitle">Короткие шаги, живые примеры, мини-практика и проекты</div>
       </div>
     </div>
 
     <div class="topbar" role="region" aria-label="Прогресс">
-      <div></div>
+      <div class="badge">Работает офлайн</div>
       <div class="progress" id="progress" aria-live="polite">
         <div class="bar" aria-label="Прогресс курса"><i id="progressBar"></i></div>
         <span id="progressText" class="txt">0%</span>
@@ -149,32 +156,23 @@ h1{margin:0; font-size:24px; font-weight:800}
     <div class="content">
       <div class="badge">Формат: 12 коротких уроков</div>
       <p class="lead">Соберём мини-сайт от семантики до форм, адаптива и JS-интерактивов.</p>
-      <div class="k">
+      <div class="k" style="display:flex; gap:8px; flex-wrap:wrap">
         <span class="pill">Новичкам и подросткам</span>
         <span class="pill">Шаги по 5–10 минут</span>
         <span class="pill">Работает офлайн</span>
       </div>
 
-      <div class="task-surface" style="margin-top:10px">
-        <b>Содержание:</b>
-        <ol class="syllabus">
-          <li><a href="lesson-1.html">У1 — Семантика и каркас</a></li>
-          <li><a href="lesson-2.html">У2 — Типографика и изображения</a></li>
-          <li><a href="lesson-3.html">У3 — Цвет, контраст, фокус</a></li>
-          <li><a href="lesson-4.html">У4 — Коробочная модель</a></li>
-          <li><a href="lesson-5.html">У5 — Flexbox</a></li>
-          <li><a href="lesson-6.html">У6 — Grid: колонки и gap</a></li>
-          <li><a href="lesson-7.html">У7 — Grid: auto-fit/minmax</a></li>
-          <li><a href="lesson-8.html">У8 — Респонсив/контейнерные</a></li>
-          <li><a href="lesson-9.html">У9 — JS: события/toggle</a></li>
-          <li><a href="lesson-10.html">У10 — localStorage</a></li>
-          <li><a href="lesson-11.html">У11 — Формы/валидация</a></li>
-          <li><a href="lesson-12.html">У12 — Итоговый проект</a></li>
-        </ol>
-      </div>
-
-      <div class="toolbar" style="margin-top:10px">
-        <button class="btn primary" id="btnContinue" type="button">Продолжить с места →</button>
+      <div class="card" style="margin-top:12px">
+        <div class="hd"><h2>Содержание</h2></div>
+        <div class="content">
+          <ol class="syllabus" id="syllabus">
+            <!-- генерируется скриптом для отметки выполненных уроков -->
+          </ol>
+          <div class="toolbar" style="display:flex; gap:10px; margin-top:12px">
+            <a class="btn primary" id="btnContinue" href="#" role="button">Продолжить с места →</a>
+            <button class="btn" id="btnConfetti" type="button" title="Проверка конфетти">Проверить конфетти ✨</button>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -183,343 +181,157 @@ h1{margin:0; font-size:24px; font-weight:800}
     <div class="inner">
       <h2>Готовы начать? 🚀</h2>
       <p>Открывайте первый урок. Прогресс сохраняется автоматически (localStorage).</p>
-      <div class="links" role="list">
-        <a href="lesson-1.html" role="listitem">Старт: Урок 1</a>
-        <a href="https://developer.mozilla.org/ru/docs/Web" target="_blank" rel="noopener noreferrer" role="listitem">MDN Web Docs</a>
-        <a href="https://css-tricks.com/" target="_blank" rel="noopener noreferrer" role="listitem">CSS-Tricks</a>
-        <a href="https://codepen.io/" target="_blank" rel="noopener noreferrer" role="listitem">CodePen</a>
+      <div class="links" role="list" style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center">
+        <a class="btn" href="lesson-1.html" role="listitem">Старт: Урок 1</a>
+        <a class="btn" href="https://developer.mozilla.org/ru/docs/Web" target="_blank" rel="noopener noreferrer" role="listitem">MDN Web Docs</a>
+        <a class="btn" href="https://css-tricks.com/" target="_blank" rel="noopener noreferrer" role="listitem">CSS-Tricks</a>
+        <a class="btn" href="https://codepen.io/" target="_blank" rel="noopener noreferrer" role="listitem">CodePen</a>
       </div>
     </div>
   </section>
 
-  <!-- Где вдохновляться -->
   <section class="card" aria-label="Где вдохновляться">
     <div class="hd"><h2>Где вдохновляться</h2></div>
     <div class="content">
-      <ul>
-        <li>
-          <a href="https://www.awwwards.com/" target="_blank" rel="noopener noreferrer">Awwwards</a> — кураторская галерея лучших сайтов мира: тренды, технологии, тёмные/светлые темы, фильтры по стилю и индустрии.
-        </li>
-        <li>
-          <a href="https://www.behance.net/" target="_blank" rel="noopener noreferrer">Behance</a> — портфолио и кейсы: веб-дизайн, брендинг, UI-проекты с процессом, сетками, компонентами и исходниками.
-        </li>
-        <li>
-          <a href="https://dribbble.com/" target="_blank" rel="noopener noreferrer">Dribbble</a> — короткие «шоты» интерфейсов: экраны, иллюстрации, дизайн-системы, идеи для анимаций и микровзаимодействий.
-        </li>
-        <li>
-          <a href="https://www.siteinspire.com/" target="_blank" rel="noopener noreferrer">SiteInspire</a> — отборная витрина чистых, типографичных сайтов; фильтры по стилям, типам и платформам.
-        </li>
-        <li>
-          <a href="https://land-book.com/" target="_blank" rel="noopener noreferrer">Land-book</a> — коллекция лендингов: подбор по нишам, цветам, шрифтам; полезно для структуры «героя», секций и CTA.
-        </li>
-        <li>
-          <a href="https://www.lapa.ninja/" target="_blank" rel="noopener noreferrer">Lapa Ninja</a> — вдохновение лендингами и секциями; быстрые идеи для хедеров, прайсов, футеров и форм подписки.
-        </li>
-        <li>
-          <a href="https://collectui.com/" target="_blank" rel="noopener noreferrer">Collect UI</a> — UI-паттерны по категориям: signin, onboarding, pricing, 404 и др.; удобно смотреть варианты одного экрана.
-        </li>
-        <li>
-          <a href="https://webflow.com/discover" target="_blank" rel="noopener noreferrer">Webflow Showcase</a> — проекты сообщества Webflow; можно изучать структуру страниц, гриды и анимации, часто доступны клонирования.
-        </li>
-        <li>
-          <a href="https://mobbin.com/" target="_blank" rel="noopener noreferrer">Mobbin</a> — большая база экранов iOS/Android: реальные приложения, пользовательские флоу (onboarding, paywall, поиск, фильтры).
-        </li>
+      <ul class="inspo">
+        <li><a href="https://www.awwwards.com/" target="_blank" rel="noopener noreferrer">Awwwards</a> — кураторская галерея лучших сайтов мира: свежие тренды, технологии, фильтры по стилям и индустриям.</li>
+        <li><a href="https://www.behance.net/" target="_blank" rel="noopener noreferrer">Behance</a> — портфолио и кейсы: веб-дизайн, брендинг, UI-проекты с процессом, сетками, компонентами и исходниками.</li>
+        <li><a href="https://dribbble.com/" target="_blank" rel="noopener noreferrer">Dribbble</a> — короткие «шоты» интерфейсов: экраны, иллюстрации, микровзаимодействия и анимации.</li>
+        <li><a href="https://www.siteinspire.com/" target="_blank" rel="noopener noreferrer">SiteInspire</a> — витрина чистых, типографичных сайтов; удобные фильтры по стилям и типам проектов.</li>
+        <li><a href="https://land-book.com/" target="_blank" rel="noopener noreferrer">Land-book</a> — коллекция лендингов: подбор по нишам, цветам, шрифтам; идеи для «героя», секций и CTA.</li>
+        <li><a href="https://www.lapa.ninja/" target="_blank" rel="noopener noreferrer">Lapa Ninja</a> — быстрые референсы для лендингов: хедеры, прайс-блоки, футеры и формы подписки.</li>
+        <li><a href="https://collectui.com/" target="_blank" rel="noopener noreferrer">Collect UI</a> — UI-паттерны по категориям: signin, onboarding, pricing, 404 и прочее; удобно сравнивать варианты одного экрана.</li>
+        <li><a href="https://webflow.com/discover" target="_blank" rel="noopener noreferrer">Webflow Showcase</a> — проекты сообщества Webflow; изучайте структуру, гриды и анимации, часть работ можно клонировать.</li>
+        <li><a href="https://mobbin.com/" target="_blank" rel="noopener noreferrer">Mobbin</a> — большая база экранов iOS/Android из реальных приложений: флоу онбординга, оплаты, поиска, фильтров и т.п.</li>
       </ul>
     </div>
   </section>
 </main>
 
-<footer class="wrap" style="text-align:center; padding:24px 16px; background:rgba(255,255,255,.75); border:1px solid rgba(0,0,0,.06); border-radius:16px; margin-bottom:24px">
+<footer class="wrap" style="text-align:center; padding:24px 16px; background:rgba(255,255,255,.78); border:1px solid rgba(0,0,0,.06); border-radius:16px; margin-bottom:24px">
   <div>© 2025</div>
   <div style="margin-top:6px; color:#6b7280; font-size:13px">Удачного обучения!</div>
 </footer>
 
-<canvas id="confettiCanvas" aria-hidden="true" style="position:fixed;inset:0;pointer-events:none"></canvas>
+<canvas id="confettiCanvas" aria-hidden="true"></canvas>
 <button id="toTop" type="button" aria-label="Наверх">↑ Наверх</button>
 
-<!-- Встроенный JS: «Course» + инициализация -->
 <script>
-;(function(){
+/* ==== Course core (прогресс + навигация + эмодзи-конфетти) ==== */
+(function(){
   'use strict';
-
-  const $  = (s, r=document) => r.querySelector(s);
-  const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+  const $ = (s, r=document)=>r.querySelector(s);
+  const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
   const clamp = (v,min,max)=>Math.max(min,Math.min(max,v));
-  const PROG_KEY = 'courseDone';
-  const LAST_KEY = 'courseLast';
+  const PROG_KEY='courseDone', LAST_KEY='courseLast';
 
-  // === Хранилище прогресса ===
   function getDoneSet(){
-    try{
-      const raw = localStorage.getItem(PROG_KEY);
-      return new Set(raw ? JSON.parse(raw) : []);
-    }catch{ return new Set(); }
+    try{ return new Set(JSON.parse(localStorage.getItem(PROG_KEY) || '[]')); }
+    catch{ return new Set(); }
   }
-  function saveDone(set){
-    localStorage.setItem(PROG_KEY, JSON.stringify(Array.from(set)));
-  }
-  function markLessonDone(n){
-    const set = getDoneSet(); set.add(Number(n)); saveDone(set);
-    localStorage.setItem(LAST_KEY, String(n));
-    updateProgressVisual();
-  }
-  function getLastLesson(){
-    const n = Number(localStorage.getItem(LAST_KEY));
-    return Number.isFinite(n) && n>=1 && n<=12 ? n : 1;
-  }
+  function saveDone(set){ localStorage.setItem(PROG_KEY, JSON.stringify(Array.from(set))); }
+  function markLessonDone(n){ const set=getDoneSet(); set.add(+n); saveDone(set); localStorage.setItem(LAST_KEY, String(n)); updateProgressVisual(); }
+  function getLastLesson(){ const n = +localStorage.getItem(LAST_KEY); return Number.isFinite(n) && n>=1 && n<=12 ? n : 1; }
   function updateProgressVisual(){
     const set = getDoneSet();
     const pct = Math.round(clamp((set.size/12)*100, 0, 100));
-    const bar = $('#progressBar');
-    if(bar){ bar.style.width = pct + '%'; }
-    const t = $('#progressText');
-    if(t){ t.textContent = pct + '%'; }
-  }
-
-  // === Навигация шагов внутри урока (для страниц уроков) ===
-  function bindSteps(container=document){
-    container.addEventListener('click', (e)=>{
-      const step = e.target.closest('.lesson-progress .step');
-      if(step){
-        const art = e.target.closest('article');
-        if(!art) return;
-        const targetId = step.getAttribute('data-target');
-        $$('.screen', art).forEach(s => s.classList.toggle('active', s.id===targetId));
-        $$('.lesson-progress .step', art).forEach(s => s.classList.toggle('active', s===step));
-        const scr = art.querySelector('.screen.active .content');
-        scr?.focus?.();
-      }
-      const nextBtn = e.target.closest('[data-next]');
-      if(nextBtn){
-        const art = e.target.closest('article');
-        const next = nextBtn.getAttribute('data-next');
-        if(art){
-          const navStep = art.querySelector(`.lesson-progress .step[data-step="${next}"]`);
-          navStep?.click();
-        }
-      }
-      const revealBtn = e.target.closest('[data-reveal]');
-      if(revealBtn){
-        const key = revealBtn.getAttribute('data-reveal');
-        const box = document.getElementById(`hintbox-${key}`);
-        if(box){ box.classList.add('show'); box.textContent = window.Course.getHint(key); }
-      }
-      const resetBtn = e.target.closest('[data-reset]');
-      if(resetBtn){
-        const key = resetBtn.getAttribute('data-reset');
-        const box = document.getElementById(`hintbox-${key}`);
-        if(box){ box.classList.remove('show'); box.textContent = ''; }
-      }
-      const runBtn = e.target.closest('[data-run]');
-      if(runBtn){
-        const ta = document.querySelector(runBtn.getAttribute('data-run'));
-        const out = document.querySelector(runBtn.getAttribute('data-out'));
-        if(ta && out){ out.srcdoc = ta.value; }
-      }
-      const checkBtn = e.target.closest('[data-check]');
-      if(checkBtn){
-        const key = checkBtn.getAttribute('data-check');
-        window.Course.runSimpleChecks(key);
-      }
-      const choiceBtn = e.target.closest('[data-choice][data-group]');
-      if(choiceBtn){
-        const val = choiceBtn.getAttribute('data-choice');
-        const group = choiceBtn.getAttribute('data-group');
-        const status = document.getElementById(`${group.replace(/\W/g,'')}-status`) || document.getElementById(`${group}-status`);
-        const isOk = window.Course.isCorrectChoice(group, val);
-        if(status){ status.textContent = isOk ? 'Верно' : 'Неверно'; status.className = isOk ? 'ok' : 'err'; }
-        window.Course.unlockNextForGroup(group, isOk);
-      }
-    });
-
-    // Теория: засчитывание при доскролле
-    $$('.task-surface[id^="theoryScrollBox-"]', container).forEach(box=>{
-      const n = box.id.split('-')[1];
-      box.addEventListener('scroll', ()=>{
-        if(box.scrollTop + box.clientHeight >= box.scrollHeight - 4){
-          const badge = document.getElementById(`theoryStatus-${n}`);
-          if(badge){ badge.textContent = 'Теория засчитана ✓'; badge.classList.add('ok'); }
-        }
-      });
+    const bar = $('#progressBar'); if(bar) bar.style.width = (pct>0 ? pct+'%' : '4px');
+    const t = $('#progressText'); if(t) t.textContent = pct + '%';
+    // обновить отметки в списке
+    $$('.lesson').forEach(a=>{
+      const n = +a.dataset.n;
+      a.classList.toggle('done', set.has(n));
+      const lab = a.querySelector('.badge-sm');
+      if(lab) lab.textContent = set.has(n) ? 'Готово' : 'Открыть';
     });
   }
 
-  // === Кнопки завершения урока (для страниц уроков) ===
-  function bindFinishButtons(){
-    for(let i=1;i<=12;i++){
-      const btn = document.getElementById(`btnFinishL${i}`);
-      const a = document.getElementById(`r${i}a`), b = document.getElementById(`r${i}b`);
-      if(btn && a && b){
-        const sync = ()=>{
-          const ok = a.checked && b.checked;
-          btn.disabled = !ok;
-          btn.classList.toggle('locked', !ok);
-        };
-        a.addEventListener('change', sync); b.addEventListener('change', sync);
-        btn.addEventListener('click', ()=>{
-          document.getElementById(`finishMsg-${i}`).textContent = `Урок ${i} завершён ✓`;
-          markLessonDone(i);
-          if(i===12){ launchConfetti(160); }
-        });
-        sync();
-      }
-    }
-    // восстановить сообщения из localStorage
-    getDoneSet().forEach(n=>{
-      const p = document.getElementById(`finishMsg-${n}`);
-      if(p) p.textContent = `Урок ${n} завершён ✓`;
-    });
+  /* ==== Генерация списка уроков (для отметки «готово») ==== */
+  const lessons = [
+    'У1 — Семантика и каркас','У2 — Типографика и изображения','У3 — Цвет, контраст, фокус',
+    'У4 — Коробочная модель','У5 — Flexbox','У6 — Grid: колонки и gap',
+    'У7 — Grid: auto-fit/minmax','У8 — Респонсив/контейнерные','У9 — JS: события/toggle',
+    'У10 — localStorage','У11 — Формы/валидация','У12 — Итоговый проект'
+  ];
+  const list = $('#syllabus');
+  if(list){
+    list.innerHTML = lessons.map((t,i)=>{
+      const n=i+1, href=`lesson-${n}.html`;
+      return `<li><a class="lesson" data-n="${n}" href="${href}">
+        <span style="display:flex;align-items:center;gap:10px"><span class="dot" aria-hidden="true"></span>${t}</span>
+        <span class="right"><span class="badge-sm">Открыть</span> →</span>
+      </a></li>`;
+    }).join('');
   }
 
-  // === Конфетти (общий) ===
-  let canvas, ctx, W=0,H=0, particles=[], rafId=null;
-  function resize(){
-    if(!canvas) return;
-    W = canvas.width  = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-  function spawn(n){
+  /* ==== Кнопка «Продолжить с места» ==== */
+  $('#btnContinue')?.addEventListener('click', (e)=>{
+    e.preventDefault();
+    const last = getLastLesson() || 1;
+    location.href = `lesson-${last}.html`;
+  });
+
+  /* ==== «Наверх» ==== */
+  (function initToTop(){
+    const btn = $('#toTop'); if(!btn) return;
+    const onScroll = ()=> btn.classList.toggle('show', window.scrollY > 400);
+    window.addEventListener('scroll', onScroll, {passive:true});
+    btn.addEventListener('click', ()=>window.scrollTo({top:0, behavior:'smooth'}));
+    onScroll();
+  })();
+
+  /* ==== Эмодзи-конфетти (🎉 ✨ 💜 + др.) ==== */
+  const canvas = $('#confettiCanvas');
+  const ctx = canvas.getContext('2d');
+  let W=0, H=0, particles=[], rafId=null;
+  const EMOJI = ['🎉','✨','💜','🎈','💥','🥳','🌟','💫','🎊','❤️'];
+
+  function resize(){ if(!canvas) return; W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
+  window.addEventListener('resize', resize, {passive:true}); resize();
+
+  function spawnEmoji(n=80, customList){
+    const list = Array.isArray(customList)&&customList.length ? customList : EMOJI;
     for(let i=0;i<n;i++){
       particles.push({
-        x: Math.random()*W, y: -10,
-        vx: (Math.random()-0.5)*6, vy: Math.random()*2+2,
-        g: 0.05 + Math.random()*0.12,
-        w: 6+Math.random()*8, h: 10+Math.random()*14,
-        rot: Math.random()*Math.PI, vr: (Math.random()-0.5)*0.2,
-        alpha: 1
+        x: Math.random()*W, y: -20,
+        vx: (Math.random()-0.5)*3, vy: Math.random()*1.5+1.8,
+        g: 0.03 + Math.random()*0.06,
+        rot: Math.random()*Math.PI*2, vr: (Math.random()-0.5)*0.08,
+        alpha: 1, size: 20 + Math.random()*18,
+        ch: list[(Math.random()*list.length)|0]
       });
     }
   }
   function step(){
     ctx.clearRect(0,0,W,H);
     particles.forEach(p=>{
-      p.vy += p.g; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.alpha -= 0.004;
-      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.globalAlpha = Math.max(0,p.alpha);
-      const grd = ctx.createLinearGradient(-p.w, -p.h, p.w, p.h);
-      grd.addColorStop(0,'#7aa2ff'); grd.addColorStop(0.5,'#ff86c2'); grd.addColorStop(1,'#ffa15a');
-      ctx.fillStyle = grd; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore();
+      p.vy += p.g; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.alpha -= 0.0038;
+      ctx.save();
+      ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.globalAlpha = Math.max(0,p.alpha);
+      ctx.font = `bold ${p.size}px system-ui, Apple Color Emoji, "Segoe UI Emoji"`;
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(p.ch, 0, 0);
+      ctx.restore();
     });
-    particles = particles.filter(p=> p.alpha>0 && p.y<H+40);
-    if(particles.length>0){ rafId = requestAnimationFrame(step); }
-    else { cancelAnimationFrame(rafId); rafId=null; }
+    particles = particles.filter(p=> p.alpha>0 && p.y < H+60);
+    if(particles.length){ rafId = requestAnimationFrame(step); }
+    else { cancelAnimationFrame(rafId); rafId = null; }
   }
-  function launchConfetti(n=120){
-    if(!canvas) return;
-    spawn(n);
+  function emojiConfetti(n=90, list){
+    spawnEmoji(n, list);
     if(!rafId) rafId = requestAnimationFrame(step);
   }
-  function initConfetti(){
-    canvas = document.getElementById('confettiCanvas');
-    if(!canvas) return;
-    ctx = canvas.getContext('2d');
-    window.addEventListener('resize', resize);
-    resize();
-    document.getElementById('btnConfetti')?.addEventListener('click', ()=>launchConfetti(180));
-  }
+  $('#btnConfetti')?.addEventListener('click', ()=> emojiConfetti(120));
 
-  // === Кнопка «Наверх» ===
-  function initToTop(){
-    const toTop = document.getElementById('toTop');
-    if(!toTop) return;
-    const onScroll = ()=>{
-      const show = window.scrollY > 400;
-      toTop.classList.toggle('show', show);
-    };
-    window.addEventListener('scroll', onScroll, {passive:true});
-    toTop.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
-    onScroll();
-  }
-
-  // === Проверки (общий API для уроков) ===
-  const right = {
-    l1q2: 'main',
-    l2a1: 'img{max-width:100%;height:auto}',
-    l3a1: '.btn:focus-visible{outline:2px solid #000}',
-    l5q1: 'display:flex',
-    l5q2: 'justify-content',
-    l7q1: 'подгоняет количество колонок по ширине',
-    l11q1:'required'
-  };
-  function isCorrectChoice(group, val){
-    if(group==='l3a1'){
-      return /focus-visible/i.test(val) && /outline:\s*\d/.test(val);
-    }
-    return (right[group]||'') === val;
-  }
-  function unlockNextForGroup(group, ok){
-    if(!ok) return;
-    const map = {
-      l1q2: 'l1-next-to-project',
-      l2a1: 'l2-next',
-      l3a1: 'l3-next',
-      l5q1: null,
-      l5q2: 'l5-next',
-      l7q1: 'l7-next',
-      l11q1:'l11-next'
-    };
-    const id = map[group];
-    if(!id) return;
-    const b = document.getElementById(id);
-    if(b){ b.disabled=false; b.classList.remove('locked'); }
-  }
-  function runSimpleChecks(key){
-    const tId = `codeT${key.replace(/\D/g,'')}`;
-    const el = document.getElementById(tId) || document.getElementById(`codeT${key.toUpperCase()}`);
-    const status = document.getElementById(`${key}-status`);
-    const val = (el?.value || '').toLowerCase();
-    let ok = false;
-    switch(key){
-      case 't1':  ok = /<h1>/.test(val) && /<nav>/.test(val) && /alt=/.test(val); break;
-      case 't2a': ok = /<figure>/.test(val) && /<figcaption>/.test(val); break;
-      case 't3a': ok = /focus-visible/.test(val) && /aria-label/.test(val); break;
-      case 't4a': ok = /box-sizing:\s*border-box/.test(val) && /box-shadow/.test(val); break;
-      case 't5':  ok = /display:\s*flex/.test(val) && /justify-content:\s*space-between/.test(val); break;
-      case 't6':  ok = /display:\s*grid/.test(val) && /grid-template-columns/.test(val); break;
-      case 't7':  ok = /auto-fit/.test(val) && /minmax/.test(val); break;
-      case 't8':  ok = /container-type:\s*inline-size/.test(val) && /@container/.test(val); break;
-      case 't9':  ok = /classlist\.toggle\('dark'\)/.test(val); break;
-      case 't10': ok = /localstorage\.setitem/.test(val); break;
-      case 't11': ok = /required/.test(val) && /minlength/.test(val); break;
-      case 't12': ok = /<form/.test(val) && /repeat\(auto-fit/.test(val); break;
-    }
-    if(status){ status.textContent = ok ? 'Мини-проверка пройдена ✓' : 'Нужно поправить'; status.className = ok ? 'ok' : 'err'; }
-    updateProgressVisual();
-  }
-  function getHint(key){
-    const H = {
-      t1:'Вставьте <header>…</header> с <nav><a>…</a></nav>, затем <h1> и картинку с alt.',
-      t2a:'Используйте <figure> с <img alt="…"> и <figcaption>.',
-      t3a:'Добавьте :focus-visible к кнопкам и aria-label к иконке.',
-      t4a:'*,*::before,*::after{box-sizing:border-box}; у .card — padding, border-radius, box-shadow.',
-      t5:'Контейнер: display:flex; justify-content:space-between; align-items:center.',
-      t6:'Сетка: grid + gap; @media ≥900px — 3 колонки; ≤600px — 1.',
-      t7:'repeat(auto-fit, minmax(220px,1fr)) — автоупаковка карточек.',
-      t8:'Включите container-type:inline-size у оболочки и используйте @container.',
-      t9:'document.getElementById("toggle").addEventListener("click",()=>document.body.classList.toggle("dark"))',
-      t10:'Чтение темы при загрузке и запись в localStorage на переключении.',
-      t11:'required у email; minlength у textarea; setCustomValidity для сообщений.',
-      t12:'Соберите хедер, галерею, адаптив и форму. Проверьте фокус/контраст.'
-    };
-    return H[key] || 'Подсказка скоро будет…';
-  }
-
-  // Экспорт
+  // Экспорт мини-API (чтобы уроки могли дергать конфетти и прогресс)
   window.Course = {
     getDoneSet, saveDone, markLessonDone, getLastLesson, updateProgressVisual,
-    bindSteps, bindFinishButtons, initConfetti, initToTop,
-    isCorrectChoice, unlockNextForGroup, runSimpleChecks, getHint,
-    launchConfetti
+    emojiConfetti
   };
-})();
 
-// Инициализация главной страницы
-document.getElementById('btnContinue')?.addEventListener('click', () => {
-  const last = window.Course.getLastLesson() || 1;
-  location.href = `lesson-${last}.html`;
-});
-window.Course.updateProgressVisual();
-window.Course.initToTop();
-window.Course.initConfetti();
+  // Инициализация
+  updateProgressVisual();
+})();
 </script>
 </body>
 </html>
