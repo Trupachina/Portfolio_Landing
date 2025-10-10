@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Мини-курс — Урок 2. Типографика и изображения</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet" />
+
+<style>
+  :root{
+    --sans:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --ink:#0b0f14; --muted:#6b7280; --card:#fff;
+    --blue:#2563eb; --green:#10b981; --orange:#f59e0b;
+    --ring:rgba(37,99,235,.20); --shadow:0 10px 35px rgba(30,30,60,.10);
+    --radius:16px; --wrap:1100px;
+    --font-size:16px; --spacing:16px;
+  }
+  body{ margin:0; color:var(--ink); font:var(--font-size)/1.55 var(--sans);
+    background:linear-gradient(120deg,#ff9a9e 0%,#fad0c4 25%,#fbc2eb 50%,#a18cd1 75%,#f6d365 100%);
+    background-size:200% 200%; animation:gradientWalk 18s ease infinite;
+  }
+  @keyframes gradientWalk{
+    0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%}
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+
+  .wrap{max-width:var(--wrap); margin:0 auto; padding:var(--spacing)}
+  header{
+    position:sticky; top:0; z-index:20;
+    backdrop-filter:saturate(150%) blur(10px);
+    background:rgba(255,255,255,.75);
+    border-bottom:1px solid rgba(0,0,0,.06);
+  }
+  .brand{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+  .logo{width:40px; height:40px; border-radius:12px;
+    background:radial-gradient(120% 140% at 20% 20%, #fff 0%, #ffd4e6 48%, #e8f0ff 92%);
+    box-shadow:0 0 0 2px rgba(255,255,255,.75), inset 0 0 18px rgba(99,102,241,.25);
+  }
+  h1{margin:0; font-size:24px; font-weight:800}
+  .subtitle{color:var(--muted); font-size:13px; margin-top:2px}
+
+  .topbar{display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:10px}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px; padding:9px 12px;
+    border-radius:12px; border:1px solid rgba(0,0,0,.06); background:#fff; font-weight:800; cursor:pointer;
+  }
+  .btn[aria-pressed="true"]{box-shadow:0 0 0 3px var(--ring)}
+  .btn.primary{background:linear-gradient(180deg,#fff,#f8fbff)}
+
+  .progress{display:flex; align-items:center; gap:8px}
+  .progress .bar{width:min(42vw,260px); height:8px; background:#eef2ff; border-radius:999px; overflow:hidden}
+  .progress .bar i{display:block; height:100%; width:0%; background:linear-gradient(90deg,#7aa2ff,#ff86c2)}
+  .progress .txt{font:700 12px var(--mono); color:#102a43}
+
+  .card{
+    background:linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.82));
+    border:1px solid rgba(0,0,0,.06);
+    border-radius:var(--radius); box-shadow:var(--shadow);
+    margin-bottom:var(--spacing);
+  }
+  .card .hd{display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid rgba(0,0,0,.06)}
+  .card .hd h2{margin:0; font-size:18px}
+  .content{padding:14px 16px 16px}
+
+  .lesson-progress{display:flex; flex-wrap:wrap; gap:8px}
+  .lesson-progress .step{
+    --c:#cbd5e1;
+    padding:8px 10px; border-radius:10px; font:700 12px var(--mono);
+    border:1px solid rgba(0,0,0,.06); background:#fff; color:#0b0f14; position:relative; cursor:pointer;
+  }
+  .lesson-progress .step[data-step="theory"]{--c:var(--blue)}
+  .lesson-progress .step[data-step="practice"]{--c:var(--green)}
+  .lesson-progress .step[data-step="project"]{--c:var(--orange)}
+  .lesson-progress .step::before{
+    content:""; width:8px; height:8px; border-radius:999px; background:var(--c);
+    position:absolute; left:8px; top:50%; transform:translateY(-50%);
+  }
+  .lesson-progress .step.active{outline:3px solid var(--ring)}
+  .screen{display:none}
+  .screen.active{display:block; animation:fade .22s ease}
+  @keyframes fade{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
+  .badge{font:700 11px/1 var(--mono); padding:6px 8px; border-radius:999px; background:#eef2ff; border:1px solid #dbe3ff; color:#102a43}
+  .pill{padding:6px 10px; border-radius:999px; background:#f6f9ff; border:1px solid rgba(0,0,0,.06); font:600 12px/1 var(--mono)}
+  .task-surface{background:linear-gradient(180deg,#fff,#fff6f7); border:1px solid rgba(0,0,0,.06); border-radius:16px; padding:12px}
+  .editor{display:grid; gap:12px}
+  textarea{
+    width:100%; min-height:300px; resize:vertical;
+    padding:12px 14px; font:600 14px/1.5 var(--mono); border:1px solid #e5e7eb; border-radius:12px; outline:none;
+  }
+  .runner{ background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:10px;}
+  .runner iframe{ width:100%; min-height:380px; border:1px solid #e5e7eb; border-radius:12px; background:#fff; }
+
+  .toolbar{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+  .practice{display:grid; gap:10px; grid-template-columns:1fr; margin:12px 0}
+  .practice .q{font-weight:800}
+  .practice .a{display:flex; gap:8px; flex-wrap:wrap}
+  .practice input{font:600 14px/1.3 var(--mono); padding:8px 10px; border:1px solid #e5e7eb; border-radius:10px; width:min(320px, 100%)}
+  .ok{color:#0a7d25; font-weight:800}
+  .err{color:#a11616; font-weight:800}
+  .locked{opacity:.6; pointer-events:none}
+  .hint-box{display:none; margin-top:8px; padding:10px 12px; border-radius:10px; border:1px solid #cde3ff; background:#eef6ff; color:#0b3a7a; font-weight:700}
+  .hint-box.show{display:block}
+  .lead{font-size:18px}
+
+  .navlinks{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+  .navlinks a{ text-decoration:none; font-weight:800; }
+
+  #toTop{
+    position:fixed; right:16px; bottom:16px; z-index:50;
+    padding:12px 14px; border-radius:999px; border:1px solid rgba(0,0,0,.06);
+    background:#ffffff; font:800 14px var(--sans); cursor:pointer;
+    box-shadow:0 10px 30px rgba(0,0,0,.2);
+    opacity:0; pointer-events:none; transition:opacity .2s, transform .2s;
+  }
+  #toTop.show{ opacity:1; pointer-events:auto }
+  #toTop:hover{ transform:translateY(-2px) }
+
+  .sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;}
+  @media(prefers-reduced-motion:reduce){ *{animation:none !important; transition:none !important} }
+</style>
+</head>
+
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand" role="banner">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>Урок 2. Типографика и изображения</h1>
+        <div class="subtitle">Хук → Теория → Мини-практика → Проект → Самостоятельно → Рефлексия</div>
+      </div>
+    </div>
+
+    <div class="topbar" role="region" aria-label="Навигация и прогресс">
+      <nav class="navlinks" aria-label="Переходы">
+        <a class="btn" href="index.html">← На главную</a>
+        <a class="btn" href="lesson-1.html">← Предыдущий урок</a>
+        <a class="btn" href="lesson-3.html" title="Следующий урок">Следующий урок →</a>
+      </nav>
+      <div class="progress" id="progress" aria-live="polite">
+        <div class="bar" aria-label="Прогресс курса"><i id="progressBar"></i></div>
+        <span id="progressText" class="txt">0%</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="app" tabindex="-1">
+  <article class="card" aria-label="Урок 2 — Типографика и изображения">
+    <div class="hd">
+      <h2>Навигация по уроку</h2>
+      <nav class="lesson-progress" aria-label="Шаги урока">
+        <div class="step active" data-step="hook"       data-target="screen-hook">Введение</div>
+        <div class="step"         data-step="theory"     data-target="screen-theory">Теория</div>
+        <div class="step"         data-step="practice"   data-target="screen-practice">Мини-практика</div>
+        <div class="step"         data-step="project"    data-target="screen-project">Проект</div>
+        <div class="step"         data-step="independent"data-target="screen-independent">Самостоятельно</div>
+        <div class="step"         data-step="reflection" data-target="screen-reflection">Рефлексия</div>
+      </nav>
+    </div>
+
+    <!-- Хук -->
+    <section id="screen-hook" class="screen active" role="region" aria-label="Введение">
+      <div class="content">
+        <div class="task-surface">
+          <h3>Зачем шрифтовая иерархия?</h3>
+          <p class="lead">Чтобы взгляд считывал страницу, как указатели в городе: крупнее — важнее. Изображения — с корректным <code>alt</code> и резиновостью.</p>
+          <div class="toolbar" style="margin-top:8px">
+            <button class="btn" data-next="theory" type="button">К теории →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Теория -->
+    <section id="screen-theory" class="screen" role="region" aria-label="Теория">
+      <div class="content">
+        <div class="task-surface" id="theoryScrollBox-2" style="max-height:38vh; overflow:auto" tabindex="0" aria-describedby="theoryEnd-2">
+          <h3 style="color:var(--blue)">Памятка</h3>
+          <ul class="mono" style="font-weight:600">
+            <li>Иерархия: <code>h1–h3</code>; базовый текст 16–18px, line-height ≈ 1.5–1.7</li>
+            <li>Изображения: <code>alt</code> обязателен; подпись — <code>figure+figcaption</code></li>
+            <li>Адаптив: <code>img{max-width:100%;height:auto}</code></li>
+          </ul>
+
+          <div class="editor" style="margin-top:12px">
+            <div>
+              <div class="toolbar"><b>Пример</b>
+                <button class="btn" data-run="#code2example" data-out="#out2example" type="button">Запустить ▶</button>
+              </div>
+<textarea id="code2example"><!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Типографика и img</title>
+  <style>
+    body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Arial;color:#111}
+    h1{font-size:28px;margin:16px 0 8px}
+    h2{font-size:20px;margin:12px 0 8px}
+    p{margin:8px 0}
+    img{max-width:100%;height:auto;border-radius:12px}
+    figure{margin:0} figcaption{font-size:12px;color:#555;margin-top:6px}
+  </style>
+</head>
+<body>
+  <main style="padding:16px;max-width:720px;margin:0 auto">
+    <h1>Заголовок статьи</h1>
+    <figure>
+      <img src="https://picsum.photos/seed/cat/800/350" alt="Кот спит на клавиатуре">
+      <figcaption>Подпись к изображению</figcaption>
+    </figure>
+    <p>Текстовый абзац с нормальной высотой строки и читабельным размером.</p>
+  </main>
+</body>
+</html></textarea>
+            </div>
+            <div class="runner">
+              <iframe id="out2example" title="Пример: Урок 2" sandbox="allow-scripts" loading="lazy"></iframe>
+            </div>
+          </div>
+
+          <p id="theoryEnd-2" class="sr-only">Конец теории Урока 2.</p>
+        </div>
+
+        <div class="toolbar" style="margin-top:10px">
+          <button class="btn" data-next="practice" type="button">К практике →</button>
+          <span id="theoryStatus-2" class="badge" aria-live="polite">Доскролльте до конца</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Мини-практика -->
+    <section id="screen-practice" class="screen" role="region" aria-label="Практика">
+      <div class="content">
+        <div class="task-surface">
+          <h3 style="color:var(--green)">Мини-практика</h3>
+
+          <div class="practice">
+            <div class="q">Как сделать изображение резиновым?</div>
+            <div class="a">
+              <button class="btn" data-choice="img{max-width:100%;height:auto}" data-group="l2a1" type="button">max-width:100%; height:auto</button>
+              <button class="btn" data-choice="img{width:100%;height:100%}" data-group="l2a1" type="button">width:100%; height:100%</button>
+              <span id="l2a1-status" aria-live="polite"></span>
+            </div>
+          </div>
+
+          <div class="practice">
+            <div class="q">Короткий <span class="mono">alt</span> для фото «кот спит на клавиатуре»?</div>
+            <div class="a">
+              <input id="l2a2" type="text" placeholder="например: Кот спит на клавиатуре">
+              <button class="btn" id="l2a2-btn" type="button">Проверить</button>
+              <span id="l2a2-status" aria-live="polite"></span>
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <button class="btn locked" id="l2-next" data-next="project" type="button" disabled>К проекту У2 →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Проект -->
+    <section id="screen-project" class="screen" role="region" aria-label="Проект">
+      <div class="content">
+        <div class="task-surface">
+          <h3 style="color:var(--orange)">Проект: статья с изображением</h3>
+          <ol>
+            <li><code>&lt;h1&gt;</code> заголовок</li>
+            <li><code>&lt;figure&gt;</code> с <code>img[alt]</code> и <code>figcaption</code></li>
+            <li>Правило: <code>img{max-width:100%;height:auto}</code></li>
+          </ol>
+          <div class="toolbar">
+            <button class="btn" data-reveal="t2" type="button">Подсказка</button>
+            <button class="btn" data-apply="t2" type="button">Вставить подсказку в редактор</button>
+            <button class="btn" data-reset-code="t2" type="button">Сбросить код редактора</button>
+          </div>
+          <div id="hintbox-t2" class="hint-box" aria-live="polite"></div>
+        </div>
+
+        <div class="editor" style="margin-top:12px">
+          <div>
+            <div class="toolbar">
+              <b>Редактор решения</b>
+              <button class="btn" data-run="#codeT2" data-out="#outT2" type="button">Запустить ▶</button>
+              <button class="btn" data-check="t2" type="button">Проверить ✓</button>
+              <span id="t2-status" aria-live="polite"></span>
+            </div>
+<textarea id="codeT2"><!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Статья</title>
+  <style>
+    body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Arial;color:#111}
+    main{padding:16px;max-width:720px;margin:0 auto}
+    img{max-width:100%;height:auto;border-radius:12px}
+    figure{margin:0} figcaption{font-size:12px;color:#555;margin-top:6px}
+  </style>
+</head>
+<body>
+  <main>
+    <!-- INSERT:H1_ART -->
+    <!-- INSERT:FIG -->
+  </main>
+</body>
+</html></textarea>
+          </div>
+          <div class="runner">
+            <iframe id="outT2" title="Проект 2 — статья" sandbox="allow-scripts" loading="lazy"></iframe>
+          </div>
+        </div>
+
+        <div class="task-surface" style="margin-top:12px">
+          <b>Самостоятельно:</b> Добавьте второе изображение с подписью и ссылку-источник под статьёй.
+          <div class="toolbar" style="margin-top:8px">
+            <button class="btn" type="button" data-next="independent">Готово — дальше →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Самостоятельно -->
+    <section id="screen-independent" class="screen" role="region" aria-label="Самостоятельно">
+      <div class="content">
+        <div class="task-surface">
+          <h3>Дополнительно</h3>
+          <ul>
+            <li>Сделайте подписи короче 80 символов.</li>
+            <li>Проверьте контраст подписи (не бледнее #6b7280 на белом).</li>
+          </ul>
+          <div class="toolbar" style="margin-top:8px">
+            <button class="btn" data-next="reflection" type="button">К рефлексии →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Рефлексия -->
+    <section id="screen-reflection" class="screen" role="region" aria-label="Рефлексия">
+      <div class="content">
+        <div class="task-surface">
+          <h3>Рефлексия</h3>
+          <label><input type="checkbox" id="r2a"> Понимаю где и как писать alt</label><br/>
+          <label><input type="checkbox" id="r2b"> Настроил(а) иерархию заголовков</label>
+          <div class="toolbar" style="margin-top:8px">
+            <button class="btn locked" id="btnFinishL2" type="button" disabled>Завершить урок 2 ✓</button>
+            <button class="btn" id="btnTestConfetti" type="button">Проверить конфетти ✨</button>
+          </div>
+          <p id="finishMsg-2" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+  </article>
+</main>
+
+<button id="toTop" type="button" aria-label="Наверх">↑ Наверх</button>
+<canvas id="confettiCanvas" aria-hidden="true" style="position:fixed;inset:0;pointer-events:none"></canvas>
+
+<script>
+(function(){
+  'use strict';
+
+  /* === Утилиты === */
+  const $  = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+  const byId = id => document.getElementById(id);
+  const clamp = (v,min,max)=>Math.max(min,Math.min(max,v));
+
+  /* === Роутинг по шагам урока === */
+  document.addEventListener('click', (e)=>{
+    const step = e.target.closest('.lesson-progress .step');
+    if(step){
+      const targetId = step.getAttribute('data-target');
+      $$('.screen').forEach(s => s.classList.toggle('active', s.id===targetId));
+      $$('.lesson-progress .step').forEach(s => s.classList.toggle('active', s===step));
+      $('.screen.active .content')?.focus?.();
+      return;
+    }
+    const nextBtn = e.target.closest('[data-next]');
+    if(nextBtn){
+      const next = nextBtn.getAttribute('data-next');
+      const navStep = $(`.lesson-progress .step[data-step="${next}"]`);
+      if(navStep){ navStep.click(); }
+    }
+    const runBtn = e.target.closest('[data-run]');
+    if(runBtn){
+      const ta = document.querySelector(runBtn.getAttribute('data-run'));
+      const out = document.querySelector(runBtn.getAttribute('data-out'));
+      if(ta && out){ out.srcdoc = ta.value; }
+    }
+    const checkBtn = e.target.closest('[data-check]');
+    if(checkBtn){ runSimpleCheck(checkBtn.getAttribute('data-check')); }
+    const choiceBtn = e.target.closest('[data-choice][data-group]');
+    if(choiceBtn){
+      const val = choiceBtn.getAttribute('data-choice');
+      const group = choiceBtn.getAttribute('data-group');
+      const status = byId(`${group}-status`);
+      const isOk = (group==='l2a1') ? (val==='img{max-width:100%;height:auto}') : false;
+      if(status){ status.textContent = isOk ? 'Верно' : 'Неверно'; status.className = isOk ? 'ok' : 'err'; }
+      if(isOk){ state.imgRuleOk = true; tryUnlockPracticeNext(); }
+    }
+  });
+
+  /* === Теория засчитывается при доскролле === */
+  const theoryBox = byId('theoryScrollBox-2');
+  theoryBox?.addEventListener('scroll', ()=>{
+    if(theoryBox.scrollTop + theoryBox.clientHeight >= theoryBox.scrollHeight - 4){
+      const b = byId('theoryStatus-2');
+      if(b){ b.textContent='Теория засчитана ✓'; b.classList.add('ok'); }
+    }
+  });
+
+  /* === Мини-практики === */
+  const state = { imgRuleOk:false, altOk:false };
+
+  byId('l2a2-btn')?.addEventListener('click', ()=>{
+    const v = (byId('l2a2')?.value || '').trim().toLowerCase();
+    // принимаем ответы, где есть «кот» и «клавиатур» (любой падеж)
+    const ok = v.includes('кот') && (v.includes('клавиатур') || v.includes('клаве'));
+    const el = byId('l2a2-status');
+    if(el){ el.textContent = ok ? 'Верно' : 'Попробуйте ещё'; el.className = ok ? 'ok' : 'err'; }
+    state.altOk = ok;
+    tryUnlockPracticeNext();
+  });
+
+  function tryUnlockPracticeNext(){
+    const allOk = state.imgRuleOk && state.altOk;
+    const b = byId('l2-next');
+    if(b){ b.disabled = !allOk; b.classList.toggle('locked', !allOk); }
+  }
+
+  /* === Проверка проекта === */
+  function runSimpleCheck(key){
+    const el = byId(`codeT${key.replace(/\D/g,'')}`); // codeT2
+    const status = byId(`${key}-status`);
+    const val = (el?.value || '').toLowerCase();
+    let ok = false;
+    if(key==='t2'){
+      ok = /<h1>/.test(val) && /<figure>/.test(val) && /<figcaption>/.test(val) && /alt=/.test(val);
+    }
+    if(status){ status.textContent = ok ? 'Мини-проверка пройдена ✓' : 'Нужно поправить'; status.className = ok ? 'ok' : 'err'; }
+  }
+
+  /* === Подсказка: текст + автозаполнение редактора === */
+  const HINTS = {
+    t2: {
+      text: 'Нужны: <h1>, затем <figure> с <img alt="…"> и <figcaption>. В CSS — img{max-width:100%;height:auto}. Кнопка ниже вставит шаблон прямо в редактор.',
+      insert: (code) => {
+        let out = code;
+        out = out.replace('<!-- INSERT:H1_ART -->', '<h1>Заголовок статьи</h1>');
+        out = out.replace('<!-- INSERT:FIG -->',
+`<figure>
+  <img src="https://picsum.photos/seed/article/900/420" alt="Кот спит на клавиатуре">
+  <figcaption>Подпись к изображению</figcaption>
+</figure>`);
+        return out;
+      }
+    }
+  };
+
+  // показать текст подсказки
+  document.addEventListener('click', (e)=>{
+    const r = e.target.closest('[data-reveal]');
+    if(!r) return;
+    const key = r.getAttribute('data-reveal');
+    const box = byId(`hintbox-${key}`);
+    if(box){ box.classList.add('show'); box.textContent = HINTS[key]?.text || 'Подсказка скоро будет…'; }
+  });
+
+  // вставить подсказку в textarea
+  document.addEventListener('click', (e)=>{
+    const a = e.target.closest('[data-apply]');
+    if(!a) return;
+    const key = a.getAttribute('data-apply');
+    const ta = byId(`codeT${key.replace(/\D/g,'')}`); // codeT2
+    if(ta){
+      if(!ta.dataset.original) ta.dataset.original = ta.value; // запомним исходник для сброса
+      const fn = HINTS[key]?.insert;
+      if(typeof fn === 'function'){ ta.value = fn(ta.value); }
+    }
+  });
+
+  // сбросить textarea к исходнику
+  document.addEventListener('click', (e)=>{
+    const b = e.target.closest('[data-reset-code]');
+    if(!b) return;
+    const key = b.getAttribute('data-reset-code');
+    const ta = byId(`codeT${key.replace(/\D/g,'')}`);
+    if(ta && ta.dataset.original){ ta.value = ta.dataset.original; }
+  });
+
+  /* === Финиш урока === */
+  const PROG_KEY = 'courseDone';
+  function getDoneSet(){
+    try{ const raw = localStorage.getItem(PROG_KEY); return new Set(raw ? JSON.parse(raw) : []); }
+    catch{ return new Set(); }
+  }
+  function saveDone(set){ localStorage.setItem(PROG_KEY, JSON.stringify(Array.from(set))); }
+
+  function markLessonDone(n){
+    const set = getDoneSet(); set.add(Number(n)); saveDone(set);
+    byId('finishMsg-2').textContent = 'Урок 2 завершён ✓';
+    updateProgressVisual();
+    launchConfetti(160);
+  }
+
+  (function bindFinish(){
+    const btn = byId('btnFinishL2');
+    const a = byId('r2a'), b = byId('r2b');
+    if(!btn || !a || !b) return;
+    const sync = ()=>{
+      const ok = a.checked && b.checked;
+      btn.disabled = !ok;
+      btn.classList.toggle('locked', !ok);
+    };
+    a.addEventListener('change', sync);
+    b.addEventListener('change', sync);
+    btn.addEventListener('click', ()=> markLessonDone(2));
+    sync();
+  })();
+
+  /* === Прогресс курса (общий) === */
+  function updateProgressVisual(){
+    const set = getDoneSet();
+    const pct = Math.round(clamp((set.size/12)*100, 0, 100));
+    const bar = byId('progressBar');
+    if(bar){
+      bar.style.width = (pct>0 ? pct + '%' : '6px'); // минимальная видимая ширина
+      bar.title = `Прогресс: ${pct}%`;
+    }
+    const t = byId('progressText');
+    if(t) t.textContent = pct + '%';
+  }
+  updateProgressVisual();
+
+  /* === Кнопка «Наверх» === */
+  const toTop = byId('toTop');
+  const onScroll = ()=>{ const show = window.scrollY > 400; toTop?.classList.toggle('show', show); };
+  window.addEventListener('scroll', onScroll, {passive:true});
+  toTop?.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+  onScroll();
+
+  /* === Конфетти === */
+  const canvas = byId('confettiCanvas');
+  const ctx = canvas.getContext('2d');
+  let W=0,H=0, particles=[], rafId=null;
+  function resize(){ W = canvas.width  = window.innerWidth; H = canvas.height = window.innerHeight; }
+  window.addEventListener('resize', resize); resize();
+
+  function spawn(n){
+    for(let i=0;i<n;i++){
+      particles.push({
+        x: Math.random()*W, y: -10,
+        vx: (Math.random()-0.5)*6, vy: Math.random()*2+2,
+        g: 0.05 + Math.random()*0.12,
+        w: 6+Math.random()*8, h: 10+Math.random()*14,
+        rot: Math.random()*Math.PI, vr: (Math.random()-0.5)*0.2,
+        alpha: 1
+      });
+    }
+  }
+  function step(){
+    ctx.clearRect(0,0,W,H);
+    particles.forEach(p=>{
+      p.vy += p.g; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.alpha -= 0.004;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.globalAlpha = Math.max(0,p.alpha);
+      const grd = ctx.createLinearGradient(-p.w, -p.h, p.w, p.h);
+      grd.addColorStop(0,'#7aa2ff'); grd.addColorStop(0.5,'#ff86c2'); grd.addColorStop(1,'#ffa15a');
+      ctx.fillStyle = grd; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore();
+    });
+    particles = particles.filter(p=> p.alpha>0 && p.y<H+40);
+    if(particles.length>0){ rafId = requestAnimationFrame(step); }
+    else { cancelAnimationFrame(rafId); rafId=null; }
+  }
+  function launchConfetti(n=120){ spawn(n); if(!rafId) rafId = requestAnimationFrame(step); }
+  window.launchConfetti = launchConfetti;
+  byId('btnTestConfetti')?.addEventListener('click', ()=> launchConfetti(140));
+})();
+</script>
+</body>
+</html>

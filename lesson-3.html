@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Мини-курс — Урок 3. Цвет, контраст и фокус</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet" />
+
+<style>
+  :root{
+    --sans:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --ink:#0b0f14; --muted:#6b7280; --card:#fff;
+    --blue:#2563eb; --green:#10b981; --orange:#f59e0b;
+    --ring:rgba(37,99,235,.20); --shadow:0 10px 35px rgba(30,30,60,.10);
+    --radius:16px; --wrap:1100px;
+    --font-size:16px; --spacing:16px;
+  }
+  body{ margin:0; color:var(--ink); font:var(--font-size)/1.55 var(--sans);
+    background:linear-gradient(120deg,#ff9a9e 0%,#fad0c4 25%,#fbc2eb 50%,#a18cd1 75%,#f6d365 100%);
+    background-size:200% 200%; animation:gradientWalk 18s ease infinite;
+  }
+  @keyframes gradientWalk{
+    0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%}
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+
+  .wrap{max-width:var(--wrap); margin:0 auto; padding:var(--spacing)}
+  header{
+    position:sticky; top:0; z-index:20;
+    backdrop-filter:saturate(150%) blur(10px);
+    background:rgba(255,255,255,.75);
+    border-bottom:1px solid rgba(0,0,0,.06);
+  }
+  .brand{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+  .logo{width:40px; height:40px; border-radius:12px;
+    background:radial-gradient(120% 140% at 20% 20%, #fff 0%, #ffd4e6 48%, #e8f0ff 92%);
+    box-shadow:0 0 0 2px rgba(255,255,255,.75), inset 0 0 18px rgba(99,102,241,.25);
+  }
+  h1{margin:0; font-size:24px; font-weight:800}
+  .subtitle{color:var(--muted); font-size:13px; margin-top:2px}
+
+  .topbar{display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:10px}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px; padding:9px 12px;
+    border-radius:12px; border:1px solid rgba(0,0,0,.06); background:#fff; font-weight:800; cursor:pointer;
+  }
+  .btn[aria-pressed="true"]{box-shadow:0 0 0 3px var(--ring)}
+  .btn.primary{background:linear-gradient(180deg,#fff,#f8fbff)}
+
+  .progress{display:flex; align-items:center; gap:8px}
+  .progress .bar{width:min(42vw,260px); height:8px; background:#eef2ff; border-radius:999px; overflow:hidden}
+  .progress .bar i{display:block; height:100%; width:0%; background:linear-gradient(90deg,#7aa2ff,#ff86c2)}
+  .progress .txt{font:700 12px var(--mono); color:#102a43}
+
+  .card{
+    background:linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.82));
+    border:1px solid rgba(0,0,0,.06);
+    border-radius:var(--radius); box-shadow:var(--shadow);
+    margin-bottom:var(--spacing);
+  }
+  .card .hd{display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid rgba(0,0,0,.06)}
+  .card .hd h2{margin:0; font-size:18px}
+  .content{padding:14px 16px 16px}
+
+  .lesson-progress{display:flex; flex-wrap:wrap; gap:8px}
+  .lesson-progress .step{
+    --c:#cbd5e1;
+    padding:8px 10px; border-radius:10px; font:700 12px var(--mono);
+    border:1px solid rgba(0,0,0,.06); background:#fff; color:#0b0f14; position:relative; cursor:pointer;
+  }
+  .lesson-progress .step[data-step="theory"]{--c:var(--blue)}
+  .lesson-progress .step[data-step="practice"]{--c:var(--green)}
+  .lesson-progress .step[data-step="project"]{--c:var(--orange)}
+  .lesson-progress .step::before{
+    content:""; width:8px; height:8px; border-radius:999px; background:var(--c);
+    position:absolute; left:8px; top:50%; transform:translateY(-50%);
+  }
+  .lesson-progress .step.active{outline:3px solid var(--ring)}
+  .screen{display:none}
+  .screen.active{display:block; animation:fade .22s ease}
+  @keyframes fade{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
+  .badge{font:700 11px/1 var(--mono); padding:6px 8px; border-radius:999px; background:#eef2ff; border:1px solid #dbe3ff; color:#102a43}
+  .pill{padding:6px 10px; border-radius:999px; background:#f6f9ff; border:1px solid rgba(0,0,0,.06); font:600 12px/1 var(--mono)}
+  .task-surface{background:linear-gradient(180deg,#fff,#fff6f7); border:1px solid rgba(0,0,0,.06); border-radius:16px; padding:12px}
+  .editor{display:grid; gap:12px}
+  textarea{
+    width:100%; min-height:300px; resize:vertical;
+    padding:12px 14px; font:600 14px/1.5 var(--mono); border:1px solid #e5e7eb; border-radius:12px; outline:none;
+  }
+  .runner{ background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:10px;}
+  .runner iframe{ width:100%; min-height:380px; border:1px solid #e5e7eb; border-radius:12px; background:#fff; }
+
+  .toolbar{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+  .practice{display:grid; gap:10px; grid-template-columns:1fr; margin:12px 0}
+  .practice .q{font-weight:800}
+  .practice .a{display:flex; gap:8px; flex-wrap:wrap}
+  .practice input{font:600 14px/1.3 var(--mono); padding:8px 10px; border:1px solid #e5e7eb; border-radius:10px; width:min(420px, 100%)}
+  .ok{color:#0a7d25; font-weight:800}
+  .err{color:#a11616; font-weight:800}
+  .locked{opacity:.6; pointer-events:none}
+  .hint-box{display:none; margin-top:8px; padding:10px 12px; border-radius:10px; border:1px solid #cde3ff; background:#eef6ff; color:#0b3a7a; font-weight:700}
+  .hint-box.show{display:block}
+  .lead{font-size:18px}
+
+  .navlinks{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+  .navlinks a{ text-decoration:none; font-weight:800; }
+
+  #toTop{
+    position:fixed; right:16px; bottom:16px; z-index:50;
+    padding:12px 14px; border-radius:999px; border:1px solid rgba(0,0,0,.06);
+    background:#ffffff; font:800 14px var(--sans); cursor:pointer;
+    box-shadow:0 10px 30px rgba(0,0,0,.2);
+    opacity:0; pointer-events:none; transition:opacity .2s, transform .2s;
+  }
+  #toTop.show{ opacity:1; pointer-events:auto }
+  #toTop:hover{ transform:translateY(-2px) }
+
+  .sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;}
+  @media(prefers-reduced-motion:reduce){ *{animation:none !important; transition:none !important} }
+</style>
+</head>
+
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand" role="banner">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>Урок 3. Цвет, контраст и фокус</h1>
+        <div class="subtitle">Хук → Теория → Мини-практика → Проект → Самостоятельно → Рефлексия</div>
+      </div>
+    </div>
+
+    <div class="topbar" role="region" aria-label="Навигация и прогресс">
+      <nav class="navlinks" aria-label="Переходы">
+        <a class="btn" href="index.html">← На главную</a>
+        <a class="btn" href="lesson-2.html">← Предыдущий урок</a>
+        <a class="btn" href="lesson-4.html" title="Следующий урок">Следующий урок →</a>
+      </nav>
+      <div class="progress" id="progress" aria-live="polite">
+        <div class="bar" aria-label="Прогресс курса"><i id="progressBar"></i></div>
+        <span id="progressText" class="txt">0%</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="app" tabindex="-1">
+  <article class="card" aria-label="Урок 3 — Цвет и доступность">
+    <div class="hd">
+      <h2>Навигация по уроку</h2>
+      <nav class="lesson-progress" aria-label="Шаги урока">
+        <div class="step active" data-step="hook"       data-target="screen-hook">Введение</div>
+        <div class="step"         data-step="theory"     data-target="screen-theory">Теория</div>
+        <div class="step"         data-step="practice"   data-target="screen-practice">Мини-практика</div>
+        <div class="step"         data-step="project"    data-target="screen-project">Проект</div>
+        <div class="step"         data-step="independent"data-target="screen-independent">Самостоятельно</div>
+        <div class="step"         data-step="reflection" data-target="screen-reflection">Рефлексия</div>
+      </nav>
+    </div>
+
+    <!-- Хук -->
+    <section id="screen-hook" class="screen active" role="region" aria-label="Введение">
+      <div class="content">
+        <div class="task-surface">
+          <h3>Видимый фокус — это навигация для клавиатуры</h3>
+          <p class="lead">Не отключайте <code>outline</code> без замены: сделайте заметное <code>:focus-visible</code>. Иконкам-кнопкам — осмысленный <code>aria-label</code>.</p>
+          <div class="toolbar" style="margin-top:8px">
+            <button class="btn" data-next="theory" type="button">К теории →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Теория -->
+    <section id="screen-theory" class="screen" role="region" aria-label="Теория">
+      <div class="content">
+        <div class="task-surface" id="theoryScrollBox-3" style="max-height:38vh; overflow:auto" tabindex="0" aria-describedby="theoryEnd-3">
+          <h3 style="color:var(--blue)">Памятка</h3>
+          <ul class="mono" style="font-weight:600">
+            <li>Контраст текста к фону ≥ <b>4.5:1</b></li>
+            <li>Фокус: <code>:focus-visible</code> с заметной обводкой (например, <code>outline:3px solid #007aff</code>)</li>
+            <li>Иконкам-кнопкам — <code>aria-label</code> (например, «Открыть меню»)</li>
+          </ul>
+
+          <!-- Живой пример -->
+          <div class="editor" style="margin-top:12px">
+            <div>
+              <div class="toolbar">
+                <b>Живой пример</b>
+                <button class="btn" data-run="#code3demo" data-out="#out3demo" type="button">Запустить ▶</button>
+              </div>
+<textarea id="code3demo"><!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Фокус, контраст и aria-label</title>
+  <style>
+    :root{ --gap:14px }
+    body{ margin:0; font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Arial; color:#111; padding:16px }
+    .row{ display:flex; flex-wrap:wrap; gap:var(--gap); align-items:center }
+    .card{ border:1px solid #e5e7eb; border-radius:12px; padding:12px; background:#fff; box-shadow:0 8px 20px rgba(0,0,0,.06) }
+    .btn{ padding:10px 14px; border:1px solid #e5e7eb; border-radius:10px; background:#fff; font-weight:800; cursor:pointer }
+
+    /* Кроссбраузерный видимый фокус */
+    .btn:focus{ outline:3px solid #007aff; outline-offset:2px }
+    .btn:focus:not(:focus-visible){ outline:none }
+
+    /* Демонстрация контраста */
+    .swatches{ display:grid; grid-template-columns:repeat(2,minmax(160px,1fr)); gap:10px; margin-top:10px }
+    .bad  { color:#9aa3b2; background:#ffffff; border-radius:10px; padding:10px }  /* контраст слабоват */
+    .good { color:#0b0f14; background:#f6f8ff; border-radius:10px; padding:10px }  /* контраст ок */
+
+    /* Иконка-кнопка только с aria-label */
+    .iconbtn{ width:44px; height:44px; display:inline-flex; align-items:center; justify-content:center; font-size:18px }
+  </style>
+</head>
+<body>
+  <h1 style="margin:0 0 8px">Фокус, контраст и доступные имена</h1>
+  <p>Кликните в это окно, затем нажмите <kbd>Tab</kbd> — увидите синее кольцо у кнопок.</p>
+
+  <div class="row">
+    <button class="btn">Обычная кнопка</button>
+    <button class="btn iconbtn" aria-label="Открыть меню" title="Открыть меню">☰</button>
+    <button class="btn iconbtn" aria-label="Поиск" title="Поиск">🔎</button>
+  </div>
+
+  <h2 style="margin:18px 0 6px">Примеры контраста</h2>
+  <div class="swatches">
+    <div class="card bad">Слабый контраст: #9aa3b2 на #fff</div>
+    <div class="card good">Хороший контраст: #0b0f14 на #f6f8ff</div>
+  </div>
+</body>
+</html></textarea>
+            </div>
+            <div class="runner">
+              <iframe id="out3demo" title="Пример: Урок 3" sandbox="allow-scripts" loading="lazy"></iframe>
+            </div>
+          </div>
+
+          <p id="theoryEnd-3" class="sr-only">Конец теории Урока 3.</p>
+        </div>
+
+        <div class="toolbar" style="margin-top:10px">
+          <button class="btn" data-next="practice" type="button">К практике →</button>
+          <span id="theoryStatus-3" class="badge" aria-live="polite">Доскролльте до конца</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Мини-практика -->
+    <section id="screen-practice" class="screen" role="region" aria-label="Практика">
+      <div class="content">
+        <div class="task-surface">
+          <h3 style="color:var(--green)">Мини-практика</h3>
+
+          <div class="practice">
+            <div class="q">Где фокус гарантированно видим?</div>
+            <div class="a">
+              <button class="btn" data-choice=".btn:focus-visible{outline:2px solid #000}" data-group="l3a1" type="button">:focus-visible 2px</button>
+              <button class="btn" data-choice=".btn:focus{outline:0}" data-group="l3a1" type="button">outline:0</button>
+              <span id="l3a1-status" aria-live="polite"></span>
+            </div>
+          </div>
+
+          <div class="practice">
+            <div class="q">Добавьте доступное имя иконке-кнопке (фрагмент HTML):</div>
+            <div class="a">
+              <input id="l3a2" type="text" placeholder='<button aria-label="Открыть меню">…'>
+              <button class="btn" id="l3a2-btn" type="button">Проверить</button>
+              <span id="l3a2-status" aria-live="polite"></span>
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <button class="btn locked" id="l3-next" data-next="project" type="button" disabled>К проекту У3 →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Проект -->
+    <section id="screen-project" class="screen" role="region" aria-label="Проект">
+      <div class="content">
+        <div class="task-surface">
+          <h3 style="color:var(--orange)">Проект: доступные кнопки</h3>
+          <ol>
+            <li>Сделайте фокус видимым (<span class="mono">:focus-visible</span> + «страховка» на <span class="mono">:focus</span>)</li>
+            <li>Иконке добавьте <span class="mono">aria-label</span></li>
+          </ol>
+          <div class="toolbar">
+            <button class="btn" data-reveal="t3" type="button">Подсказка</button>
+            <button class="btn" data-apply="t3" type="button">Вставить подсказку в редактор</button>
+            <button class="btn" data-reset-code="t3" type="button">Сбросить код редактора</button>
+          </div>
+          <div id="hintbox-t3" class="hint-box" aria-live="polite"></div>
+        </div>
+
+        <div class="editor" style="margin-top:12px">
+          <div>
+            <div class="toolbar">
+              <b>Редактор решения</b>
+              <button class="btn" data-run="#codeT3" data-out="#outT3" type="button">Запустить ▶</button>
+              <button class="btn" data-check="t3" type="button">Проверить ✓</button>
+              <span id="t3-status" aria-live="polite"></span>
+            </div>
+<textarea id="codeT3"><!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Доступные кнопки</title>
+  <style>
+    body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial;color:#111;padding:16px}
+    .btn{padding:10px 14px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;font-weight:800;cursor:pointer}
+    /* INSERT:FOCUS */
+  </style>
+</head>
+<body>
+  <!-- INSERT:BTN -->
+</body>
+</html></textarea>
+          </div>
+          <div class="runner">
+            <iframe id="outT3" title="Проект 3 — доступные кнопки" sandbox="allow-scripts" loading="lazy"></iframe>
+          </div>
+        </div>
+
+        <div class="task-surface" style="margin-top:12px">
+          <b>Самостоятельно:</b> Добавьте вторую иконку-кнопку «Поиск» с тем же стилем фокуса.
+          <div class="toolbar" style="margin-top:8px">
+            <button class="btn" type="button" data-next="independent">Готово — дальше →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Самостоятельно -->
+    <section id="screen-independent" class="screen" role="region" aria-label="Самостоятельно">
+      <div class="content">
+        <div class="task-surface">
+          <h3>Дополнительно</h3>
+          <ul>
+            <li>Проверьте контраст текста на кнопке ≥ 4.5:1.</li>
+          </ul>
+          <div class="toolbar" style="margin-top:8px">
+            <button class="btn" data-next="reflection" type="button">К рефлексии →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Рефлексия -->
+    <section id="screen-reflection" class="screen" role="region" aria-label="Рефлексия">
+      <div class="content">
+        <div class="task-surface">
+          <h3>Рефлексия</h3>
+          <label><input type="checkbox" id="r3a"> Понимаю разницу :focus / :focus-visible</label><br/>
+          <label><input type="checkbox" id="r3b"> Помню про aria-label для иконок</label>
+          <div class="toolbar" style="margin-top:8px">
+            <button class="btn locked" id="btnFinishL3" type="button" disabled>Завершить урок 3 ✓</button>
+            <button class="btn" id="btnTestConfetti" type="button">Проверить конфетти ✨</button>
+          </div>
+          <p id="finishMsg-3" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+  </article>
+</main>
+
+<button id="toTop" type="button" aria-label="Наверх">↑ Наверх</button>
+<canvas id="confettiCanvas" aria-hidden="true" style="position:fixed;inset:0;pointer-events:none"></canvas>
+
+<script>
+(function(){
+  'use strict';
+
+  /* === Утилиты === */
+  const $  = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+  const byId = id => document.getElementById(id);
+  const clamp = (v,min,max)=>Math.max(min,Math.min(max,v));
+  const safe = s => (s||'').toLowerCase().replace(/\s+/g,'').replace(/["'`]/g,'');
+
+  /* === Роутинг === */
+  document.addEventListener('click', (e)=>{
+  	const step = e.target.closest('.lesson-progress .step');
+    if(step){
+      const targetId = step.getAttribute('data-target');
+      $$('.screen').forEach(s => s.classList.toggle('active', s.id===targetId));
+      $$('.lesson-progress .step').forEach(s => s.classList.toggle('active', s===step));
+      $('.screen.active .content')?.focus?.();
+      return;
+    }
+    const nextBtn = e.target.closest('[data-next]');
+    if(nextBtn){
+      const next = nextBtn.getAttribute('data-next');
+      const navStep = $(`.lesson-progress .step[data-step="${next}"]`);
+      if(navStep){ navStep.click(); }
+    }
+    const runBtn = e.target.closest('[data-run]');
+    if(runBtn){
+      const ta = document.querySelector(runBtn.getAttribute('data-run'));
+      const out = document.querySelector(runBtn.getAttribute('data-out'));
+      if(ta && out){ out.srcdoc = ta.value; }
+    }
+    const checkBtn = e.target.closest('[data-check]');
+    if(checkBtn){ runSimpleCheck(checkBtn.getAttribute('data-check')); }
+    const choiceBtn = e.target.closest('[data-choice][data-group]');
+    if(choiceBtn){
+      const val = choiceBtn.getAttribute('data-choice');
+      const group = choiceBtn.getAttribute('data-group');
+      const status = byId(`${group}-status`);
+      const isOk = (group==='l3a1') ? (/focus-visible/i.test(val) && /outline:\s*\d/.test(val)) : false;
+      if(status){ status.textContent = isOk ? 'Верно' : 'Неверно'; status.className = isOk ? 'ok' : 'err'; }
+      if(isOk){ state.focusOk = true; tryUnlockPracticeNext(); }
+    }
+  });
+
+  /* === Теория засчитывается при доскролле === */
+  const theoryBox = byId('theoryScrollBox-3');
+  theoryBox?.addEventListener('scroll', ()=>{
+    if(theoryBox.scrollTop + theoryBox.clientHeight >= theoryBox.scrollHeight - 4){
+      const b = byId('theoryStatus-3');
+      if(b){ b.textContent='Теория засчитана ✓'; b.classList.add('ok'); }
+    }
+  });
+
+  /* === Мини-практика === */
+  const state = { focusOk:false, ariaOk:false };
+
+  byId('l3a2-btn')?.addEventListener('click', ()=>{
+    const v = safe(byId('l3a2')?.value);
+    const ok = v.includes('arialabel') && (v.includes('открытьменю') || (v.includes('open') && v.includes('menu')));
+    const el = byId('l3a2-status');
+    if(el){ el.textContent = ok ? 'Верно' : 'Попробуйте ещё'; el.className = ok ? 'ok' : 'err'; }
+    state.ariaOk = ok;
+    tryUnlockPracticeNext();
+  });
+
+  function tryUnlockPracticeNext(){
+    const allOk = state.focusOk && state.ariaOk;
+    const b = byId('l3-next');
+    if(b){ b.disabled = !allOk; b.classList.toggle('locked', !allOk); }
+  }
+
+  /* === Проверка проекта === */
+  function runSimpleCheck(key){
+    const el = byId(`codeT${key.replace(/\D/g,'')}`); // codeT3
+    const status = byId(`${key}-status`);
+    const val = (el?.value || '').toLowerCase();
+    let ok = false;
+    if(key==='t3'){
+      ok = /focus-visible/.test(val) && /aria-label/.test(val);
+    }
+    if(status){ status.textContent = ok ? 'Мини-проверка пройдена ✓' : 'Нужно поправить'; status.className = ok ? 'ok' : 'err'; }
+  }
+
+  /* === Подсказки: текст + автозаполнение редактора === */
+  const HINTS = {
+    t3: {
+      text: 'Добавьте видимый фокус для .btn с кроссбраузерной «страховкой» и aria-label для иконки. Кнопка «Вставить подсказку…» заполнит шаблон.',
+      insert: (code) => {
+        let out = code;
+        // кроссбраузерный фокус (focus + focus:not(:focus-visible))
+        out = out.replace(
+          '/* INSERT:FOCUS */',
+          `.btn:focus{outline:3px solid #007aff; outline-offset:2px}
+    .btn:focus:not(:focus-visible){outline:none}`
+        );
+        out = out.replace('<!-- INSERT:BTN -->', '<button class="btn" aria-label="Открыть меню" title="Открыть меню">☰</button>');
+        return out;
+      }
+    }
+  };
+
+  // показать текст подсказки
+  document.addEventListener('click', (e)=>{
+    const r = e.target.closest('[data-reveal]');
+    if(!r) return;
+    const key = r.getAttribute('data-reveal');
+    const box = byId(`hintbox-${key}`);
+    if(box){ box.classList.add('show'); box.textContent = HINTS[key]?.text || 'Подсказка скоро будет…'; }
+  });
+
+  // вставить подсказку в textarea
+  document.addEventListener('click', (e)=>{
+    const a = e.target.closest('[data-apply]');
+    if(!a) return;
+    const key = a.getAttribute('data-apply');
+    const ta = byId(`codeT${key.replace(/\D/g,'')}`); // codeT3
+    if(ta){
+      if(!ta.dataset.original) ta.dataset.original = ta.value; // запомним исходник для сброса
+      const fn = HINTS[key]?.insert;
+      if(typeof fn === 'function'){ ta.value = fn(ta.value); }
+    }
+  });
+
+  // сбросить textarea к исходнику
+  document.addEventListener('click', (e)=>{
+    const b = e.target.closest('[data-reset-code]');
+    if(!b) return;
+    const key = b.getAttribute('data-reset-code');
+    const ta = byId(`codeT${key.replace(/\D/g,'')}`); // codeT3
+    if(ta && ta.dataset.original){ ta.value = ta.dataset.original; }
+  });
+
+  /* === Финиш урока === */
+  const PROG_KEY = 'courseDone';
+  function getDoneSet(){
+    try{ const raw = localStorage.getItem(PROG_KEY); return new Set(raw ? JSON.parse(raw) : []); }
+    catch{ return new Set(); }
+  }
+  function saveDone(set){ localStorage.setItem(PROG_KEY, JSON.stringify(Array.from(set))); }
+
+  function markLessonDone(n){
+    const set = getDoneSet(); set.add(Number(n)); saveDone(set);
+    byId('finishMsg-3').textContent = 'Урок 3 завершён ✓';
+    updateProgressVisual();
+    launchConfetti(160);
+  }
+
+  (function bindFinish(){
+    const btn = byId('btnFinishL3');
+    const a = byId('r3a'), b = byId('r3b');
+    if(!btn || !a || !b) return;
+    const sync = ()=>{
+      const ok = a.checked && b.checked;
+      btn.disabled = !ok;
+      btn.classList.toggle('locked', !ok);
+    };
+    a.addEventListener('change', sync);
+    b.addEventListener('change', sync);
+    btn.addEventListener('click', ()=> markLessonDone(3));
+    sync();
+  })();
+
+  /* === Прогресс курса (верхняя полоска) === */
+  function updateProgressVisual(){
+    const set = getDoneSet();
+    const pct = Math.round(clamp((set.size/12)*100, 0, 100));
+    const bar = byId('progressBar');
+    if(bar){
+      bar.style.width = (pct>0 ? pct + '%' : '6px');
+      bar.title = `Прогресс: ${pct}%`;
+    }
+    const t = byId('progressText');
+    if(t) t.textContent = pct + '%';
+  }
+  updateProgressVisual();
+
+  /* === Кнопка «Наверх» === */
+  const toTop = byId('toTop');
+  const onScroll = ()=>{ const show = window.scrollY > 400; toTop?.classList.toggle('show', show); };
+  window.addEventListener('scroll', onScroll, {passive:true});
+  toTop?.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+  onScroll();
+
+  /* === Конфетти === */
+  const canvas = byId('confettiCanvas');
+  const ctx = canvas.getContext('2d');
+  let W=0,H=0, particles=[], rafId=null;
+  function resize(){ W = canvas.width  = window.innerWidth; H = canvas.height = window.innerHeight; }
+  window.addEventListener('resize', resize); resize();
+
+  function spawn(n){
+    for(let i=0;i<n;i++){
+      particles.push({
+        x: Math.random()*W, y: -10,
+        vx: (Math.random()-0.5)*6, vy: Math.random()*2+2,
+        g: 0.05 + Math.random()*0.12,
+        w: 6+Math.random()*8, h: 10+Math.random()*14,
+        rot: Math.random()*Math.PI, vr: (Math.random()-0.5)*0.2,
+        alpha: 1
+      });
+    }
+  }
+  function step(){
+    ctx.clearRect(0,0,W,H);
+    particles.forEach(p=>{
+      p.vy += p.g; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.alpha -= 0.004;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.globalAlpha = Math.max(0,p.alpha);
+      const grd = ctx.createLinearGradient(-p.w, -p.h, p.w, p.h);
+      grd.addColorStop(0,'#7aa2ff'); grd.addColorStop(0.5,'#ff86c2'); grd.addColorStop(1,'#ffa15a');
+      ctx.fillStyle = grd; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore();
+    });
+    particles = particles.filter(p=> p.alpha>0 && p.y<H+40);
+    if(particles.length>0){ rafId = requestAnimationFrame(step); }
+    else { cancelAnimationFrame(rafId); rafId=null; }
+  }
+  function launchConfetti(n=120){ spawn(n); if(!rafId) rafId = requestAnimationFrame(step); }
+  window.launchConfetti = launchConfetti;
+  byId('btnTestConfetti')?.addEventListener('click', ()=> launchConfetti(140));
+})();
+</script>
+</body>
+</html>
