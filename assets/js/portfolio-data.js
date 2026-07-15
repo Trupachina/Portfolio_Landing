@@ -31,7 +31,7 @@ window.PORTFOLIO_DATA = {
     {
       id: "emopot",
       group: "backend",
-      categories: ["backend", "web"],
+      categories: ["backend"],
       title: "Платформа оценки потенциала и маршрутизации",
       subtitle: "Мультимодальная диагностика, цифровой профиль и рекомендации по ИТ-трекам",
       status: "Рабочий прототип",
